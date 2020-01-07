@@ -1,0 +1,104 @@
+\documentclass{book}
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[nottoc]{tocbibind} 
+\usepackage[toc,page]{appendix}
+\usepackage{array}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usepackage{titling}
+\usepackage{transparent}
+\usepackage{hyperref} 
+\usepackage{eso-pic}
+\usepackage{adjustbox}
+\usepackage{array,multirow}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{textcomp}
+\usepackage{makecell}
+\usepackage[font=small,labelfont=bf]{caption} 
+\usepackage{pdfpages}
+\usepackage{emptypage}
+\usepackage{multicol}
+\pgfplotsset{compat=1.14}
+\rhead{}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+\hbox{}
+\thispagestyle{plain}
+\newpage
+\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+\lstset{
+    frame=tb, % draw a frame at the top and bottom of the code block
+    tabsize=4, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    numbers=left, % display line numbers on the left
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{red}, % keyword color
+    stringstyle=\color{blue}, % string color
+    breaklines=true,
+    postbreak=\mbox{\textcolor{green}{$\hookrightarrow$}\space}
+}
+\addto\captionsitalian{%
+  \renewcommand\appendixname{Appendice}
+  \renewcommand\appendixpagename{Appendice}
+}
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\makeatletter
+\newenvironment{breakablealgorithm}
+  {% \begin{breakablealgorithm}
+   \begin{center}
+     \refstepcounter{algorithm}% New algorithm
+     \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+     \renewcommand{\caption}[2][\relax]{% Make a new \caption
+       {\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}%
+       \ifx\relax##1\relax % #1 is \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+       \else % #1 is not \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+       \fi
+       \kern2pt\hrule\kern2pt
+     }
+  }{% \end{breakablealgorithm}
+     \kern2pt\hrule\relax% \@fs@post for \@fs@ruled
+   \end{center}
+  }  
+\makeatother
+\renewcommand\appendixtocname{Appendice}
+\makeatletter
+\renewcommand{\ALG@name}{Pseudocodice}
+\makeatother
+\renewcommand{\listalgorithmname}{Lista degli pseudocodici}
+\renewcommand{\lstlistingname}{Implementazione C++}% Listing -> Algorithm
+\renewcommand{\lstlistlistingname}{Implementazioni C++}% List of Listings -> List of Algorithms
+\makeatletter
+\renewcommand{\frontmatter}{\cleardoublepage\@mainmatterfalse}
+\renewcommand{\mainmatter}{\cleardoublepage\@mainmattertrue}
+\makeatother
+
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\DeclareRobustCommand*{\bbl@ap}[1]{%
+  \textormath{\textsuperscript{#1}}{^{\mathrm{#1}}}}%
+  \date{\textbf{\today}}
+\author{\textbf{Giacomo Fantoni}}
