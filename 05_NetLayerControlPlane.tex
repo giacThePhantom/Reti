@@ -1,9 +1,9 @@
 \chapter{Livello di rete: control plane}
 \section{Introduzione}
-Le tabelle di forwarding e di flow sono computate installate e mantenute secondo due approcci:
+Le tabelle di forwarding e di flow sono computate e mantenute secondo due approcci:
 \begin{itemize}
 \item Per-router control: un algoritmo di routing viene eseguito su ogni router della rete in cui sono contenute funzioni di routing e forwarding. Ogni 
-router possiede una componente di routing che comunica con quella degli altri router per computare i valori della tabella di forwarding i protocolli di 
+router possiede una componente di routing che comunica con quella degli altri router per computare i valori della tabella di forwarding. I protocolli di 
 OSPF e BGP sono basati su questo approccio.
 \item Logically centralized control: un controller centralizzato computa e distribuisce le tabelle di forwarding, permette di implementare numerose funzioni
 attraverso una flow table. Il controller interagisce con ogni agente di controllo in ogni router attraverso un protocollo ben definito e non interagisce con
@@ -13,7 +13,7 @@ altri CA.
 Lo scopo di questi algoritmi \`e quello di determinare i cammini ottimi o routes da mittente e destinatario attraverso la rete di router. Un grafo \`e 
 utilizzato per formulare questo problema in cui i nodi rappresentano router e gli archi i collegamenti tra di essi. Ogni arco ha un valore che rappresenta
 il suo costo che riflette la lunghezza fisica del link, la sua velocit\`a di trasmissione e il costo economico. Per un arco $(x, y)$ si indica il costo 
-attravreso $c(x, y)$, se il paio non appartiene al grafo $c(x, y)=+\infty$. L'obiettivo naturale per questo algoritmo \`e pertanto quello di trovare il 
+attraverso $c(x, y)$, se l'arco non appartiene al grafo $c(x, y)=+\infty$. L'obiettivo naturale per questo algoritmo \`e pertanto quello di trovare il 
 cammino meno costoso tra due nodi. 
 \begin{itemize}
 \item Un algoritmo di routing centralizzato computa il cammino meno costoso utilizzando una conoscenza completa della rete, ovvero prende come input il 
@@ -23,7 +23,7 @@ conoscenza completa della rete, ma conosce unicamente i costi dei link a lui dir
 calcoli e di scambio di informazioni con altri nodi vicini il nodo calcola gradualmente il cammino meno costoso per un insieme di destinazioni. 
 \end{itemize}
 Gli algoritmi di routing si possono classificare anche in base al fatto che siano statici (dove routes cambiano raramente) o dinamici (dove routes cambiano
-dinamicamente in maniera responsiva in base a cambi di topologia o di costo dei link: si ottenogno per esempio eseguendoli periodicamente. Un ulteriore 
+dinamicamente in maniera responsiva in base a cambi di topologia o di costo dei link: si ottengono per esempio eseguendoli periodicamente. Un ulteriore 
 metodo di classificazione si basa sul fatto se gli algoritmi sono load-sensitive o no in cui i costi dei link variano dinamicamente in base al livello di 
 congestione della rete. 
 \subsection{L'algoritmo di link state routing}
@@ -41,7 +41,7 @@ per ogni nodo del grafo.
 Quando l'algoritmo LS termina si ha per ogni nodo il suo predecessore e il cammino ottimo dal nodo di origine. La tabella di forwarding \`e costruita 
 salvando per ogni destinazione il prossimo hop nel cammino ottimo. Questo algoritmo ha complessit\`a $O(n^2)$. 
 \subsection{L'algoritmo di distance vector routing}
-L'algoritmo di distance vector \`e iterativo, asincrono e distribuito. \`E distribuito nel senco che ogni nodo riceve informazioni da uno o pi\`u dei suoi
+L'algoritmo di distance vector \`e iterativo, asincrono e distribuito. \`E distribuito nel senso che ogni nodo riceve informazioni da uno o pi\`u dei suoi
 diretti vicini, svolge un calcolo e ritorna i dati ai vicini. \`E asincrono in quanto non richiede che i vicini operino in lockstep l'uno con l'altro ed \`e
 self-terminating. Si consideri $d_x(y)$ il cammino ottimo da $x$ a $y$ e $v$ ogni vicino di $x$, allora secondo l'equazione di Bellman-Ford $d_x(y)=\min_v
 \{c(x, v)+d_v(y)\}$. La soluzione a questa equazione d\`a le entries da mettere nella tabella di forwarding: si consideri $v*$ ogni nodo vicino che risolve
@@ -54,8 +54,8 @@ vettore della stima dei costi del cammino ottimo. Con l'algoritmo DV l'algoritmo
 \item Il vettore delle distanze di ogni suo vicino, ovvero $D_v$ per ogni vicino $v$.
 \end{itemize}
 Nell'algoritmo distribuito e asincrono ogni tanto ogni nodo manda una copia del suo vettore delle distanze ai suoi vicini che lo salvano e lo utilizzano
-per aggiornare il proprio vettore delle distanze seguento l'equazione di Bellman-Ford: $D_x(y)=\min_v\{c(x, v)+D_v(y)\}$ per ogni nodo $y$ in $N$. Se il 
-vettore delle distanze viene modificato nel passo di aggiornamento $x$ invia una copia ad ogni vicino. Se tutti i nodi contiunano a scambiarsi i vettori 
+per aggiornare il proprio vettore delle distanze seguendo l'equazione di Bellman-Ford: $D_x(y)=\min_v\{c(x, v)+D_v(y)\}$ per ogni nodo $y$ in $N$. Se il 
+vettore delle distanze viene modificato nel passo di aggiornamento $x$ invia una copia ad ogni vicino. Se tutti i nodi continuano a scambiarsi i vettori 
 delle distanze in maniera asincrona ogni stima $D_x(y)$ converge a $d_x(y)$ il costo ottimo reale. 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{AlgoritmoDijkstra.png}
@@ -68,15 +68,15 @@ Quando un nodo che esegue l'algoritmo DV percepisce un cambio di costo in un lin
 ottimi informa i suoi vicini. Questi aggiornamenti a causa della loro localit\`a possono causare dei routing loop che possono essere molto difficili da
 risolvere, anche se poi verranno risolti. Questi problemi sono chiamati count-to-infinity problem. 
 \subsubsection{Aggiungere poisoned revers}
-Lo scenario appena descritto pu\`o essere evitato aggiungendo una poisoned reverse: se un nodo routa il pacchetto verso quello che gliel'ha inviato gli 
+Lo scenario appena descritto pu\`o essere evitato aggiungendo una poisoned reverse: se un nodo instrada il pacchetto verso quello che gliel'ha inviato gli 
 mente inviandogli che la sua distanza dalla destinazione finale \`e $\infty$ fino a che $z$ continuer\`a a fare routing verso la destinazione da tale nodo.
 Credendo che non ci sia cammino il primo mittente cambier\`a cammino. Questa tecnica risolve il count-to-infinity problem unicamente se il loop accade su 
 nodi vicini. 
 \subsection{Confronto tra LS e DV}
 Si indichi con $N$ il numero di nodi e con $E$ il numero di archi:
 \begin{itemize}
-\item Complessit\`a dei messaggi: essendo che LS richiede che ogni nodo conosca il costo di ogni link nella rete vengono richiesti $O(|V|+|E|)$ messaggi e 
-il cambio di costo di un link deve essere comunicato a tutti i nodi. DV richiede uno scambio di messaggi unicamente tra vicini ad ogni iterazione il costo
+\item Complessit\`a dei messaggi: essendo che LS richiede che ogni nodo conosca il costo di ogni link nella rete vengono richiesti $O(|V|+|E|)$ messaggi per router e 
+il cambio di costo di un link deve essere comunicato a tutti i nodi. DV richiede uno scambio di messaggi unicamente tra vicini ad ogni iterazione ma il costo
 di convergenza dipende da molti cammini. Il cambio di costo di un link causa una propagazione di messaggi unicamente se cambia un cammino ottimo.
 \item Velocit\`a di convergenza: LS \`e un algoritmo in $O(|N|^2)$ messaggi che richiede $O(|V|+|E|)$ messaggi. L'algoritmo DV pu\`o convergere lentamente
 e incontrare routing loop e il count-to-infinity problem.
@@ -87,19 +87,19 @@ malfunzionamento questo pu\`o diffondersi in tutta la rete.
 Il modello che considera l'internet come un omogeneo insieme di router che eseguono tutti lo stesso algoritmo \`e semplicistico per due ragioni:
 \begin{itemize}
 \item Scala: con la crescita del numero di router l'overhead necessaria a calcolare, comunicare e salvare le informazioni di routing diventa proibitiva. 
-\item Autonomia amministrativa: l'internet \`e una rete di ISPs che possiedono la propria rete di routers. Queste ISP desiderano di operare in maniera pi\`u
+\item Autonomia amministrativa: l'internet \`e una rete di ISPs che possiedono la propria rete di routers. Queste ISP desiderano operare in maniera pi\`u
 autonoma possibile e amministrare la propria rete secondo il loro desiderio ma essere capaci di connettere la loro rete con le altre.
 \end{itemize}
 Entrambi questi problemi possono essere risolti organizzando i router in sistemi autonomi (ASs) consistenti di insiemi di router sotto lo stesso controllo
 amministrativo, identificato globalmente dal suo autonomous system number (ASN), assegnati anche loro da ICANN. Router nello stesso AS eseguono lo stesso 
 algoritmo di routing e possiedono informazioni gli uni degli altri. Questo algoritmo di routing \`e detto intra-autonomous system routing protocol. 
-\subsection{Opend shortest path first (OSPF)}
+\subsection{Open shortest path first (OSPF)}
 Il routing OSPF e il suo simile IS-IS sono largamente utilizzati per le operazioni di routing per le intra-AS dell'internet. La parola Open indica che il 
-protocollo \`e pubblicamente disponibile. Questo protocollo \`e un protocollo che usa flooding di informazioni di link-state e un algoritmo di cammino 
+protocollo \`e pubblicamente disponibile. Questo protocollo usa flooding di informazioni di link-state e un algoritmo di cammino 
 ottimo di Dijkstra. Ogni router costruisce una mappa topologica completa dell'intero sistema autonomo, ogni router successivamente esegue Dijkstra per 
-determinare l'albero di cammino minimo per ogni sottorete con s\`e stesso come radice i costi di link sono configurati dal'amministratore di rete. Un router
+determinare l'albero di cammino minimo per ogni sottorete con s\`e stesso come radice (i costi di link sono configurati dall'amministratore di rete). Un router
 fa un broadcast delle sue informazioni di link-state a tutti gli altri router ogni volta c'\`e un cambio in un link-state e periodicamente (almeno ogni 30
-minuti). Questi messaggi sono trasportati direttamente da IP con un protocollo di livello pi\`u alto per OSPF che controlla se i link sono funzionali. 
+minuti). Questi messaggi sono trasportati direttamente da IP con un protocollo di livello pi\`u alto per OSPF che controlla se i link sono funzionanti. 
 Alcuni dei vantaggi di OSPF sono:
 \begin{itemize}
 \item Sicurezza: scambi tra router OSPF possono essere autenticati: solo trusted router possono partecipare nelle tabelle. Si pu\`o utilizzare una password
@@ -107,13 +107,13 @@ in plaintext o MD5.
 \item Cammini ottimi multipli: quando esistono multipli cammini ottimi tutti possono essere utilizzati. 
 \item Supporto integrato per unicast e multicast broadcasting: MOSPF usa il link database OSPF e aggiunge un nuovo tipo di avvertimento link state al 
 meccanismo di broadcast.
-\item Supporto per gerarchie all'interno di un singolo AS: L'AS viene separate in aree comunicanti attraverso area border router. Un'area \`e designata come
-backbone per fare routing tra le vaire aree contiene tutti i router area border e anche altri. 
+\item Supporto per gerarchie all'interno di un singolo AS: L'AS viene separato in aree comunicanti attraverso area border router. Un'area \`e designata come
+backbone per fare routing tra le varie aree contiene tutti i router area border e anche altri. 
 \end{itemize}
-\section{Rounting tra ISPs: BGP}
+\section{Routing tra ISPs: BGP}
 Per fare routing tra host in diverse AS si rende necessario un protocollo di inter-autonomous system routing. Tutte le AS comunicanti devono eseguire lo 
 stesso protocollo chiamato il Border Gateway protocol BGP. \`E un protocollo asincrono e decentralizzato con un algoritmo di routing DV. 
-\subsection{Il roulo di BGP}
+\subsection{Routing BGP}
 Se la destinazione di un pacchetto \`e esterna all'AS il pacchetto viene instradato verso prefissi CIDRized, con ognuno di essi rappresentanti una subnet o
 un insieme di subnet. Pertanto un entry della tabella di forwarding avr\`a la forma $(x, I)$, con $x$ il prefisso e $I$ il numero di interfaccia di una 
 delle interfacce del router. BGP mette a disposizione ad ogni router modi per:
@@ -152,12 +152,12 @@ sono pi\`u di una invoca le seguenti regole di eliminazione fino a che ne rimane
 \item Se rimangono ancora pi\`u routes vengono utilizzati i BGP identifiers. 
 \end{itemize}
 \subsection{IP anycast}
-BGP \`e utilizzato per implementare il servizio di IP anycast usato comunamente dai DNS. Viene utilizzato in quanto si \`e interessati a duplicare contenuti
+BGP \`e utilizzato per implementare il servizio di IP anycast usato comunemente dai DNS. Viene utilizzato in quanto si \`e interessati a duplicare contenuti
 in diversi server dispersi geograficamente e far accedere ogni utente al server pi\`u vicino. Durante la fase di configurazione dell'anycast una compagnia
 assegna lo stesso indirizzo IP ai suoi server e usa BGP per pubblicizzare ognuno di questi. Quando un router riceve questi multipli li tratta come se 
 mettessero a disposizione diverse routes per la stessa destinazione. 
 \subsection{Politica di routing}
-Il campdio della local preference \`e utilizzato per determinare delle zone protette dove non si devono svolgere operazioni di routing o per scegliere altri
+Il cambio della local preference \`e utilizzato per determinare delle zone protette dove non si devono svolgere operazioni di routing o per scegliere altri
 cammini in modo da rispettare politiche dell'ISP. 
 \section{The SDN control plane}
 Si possono identificare quattro caratteristiche fondamentali di un'architettura SDN:
@@ -174,12 +174,12 @@ controller di possono dividere in tre categorie:
 \item Un livello di comunicazione tra il controller e i dispositivi connessi alla rete attraverso un protocollo conosciuto come l'interfaccia "southbound"
 del controller.
 \item Un livello di gestione dello stato per tutta la rete in quanto decisioni prese dal controller richiedono informazioni riguardo tutta la rete. 
-\item Un interfaccia verso le applcazioni di controllo di rete detta anche interfaccia "northbound" in modo di permettere a funzioni di leggere e scrivere
+\item Un interfaccia verso le applicazioni di controllo di rete detta anche interfaccia "northbound" in modo di permettere a funzioni di leggere e scrivere
 all'interno del livello di gestione di stato della rete. 
 \end{itemize}
 Il controller \`e logicamente centralizzato ma in realt\`a \`e costituito da diversi server con database e algoritmi distribuiti. 
 \subsection{Il protocollo OpenFlow}
-Il protocollo OpenFlow opera tra il controller e unp switch controllato da SDN, opera attraverso TCP con porta 6653. Tra i messaggi inviati dal controller
+Il protocollo OpenFlow opera tra il controller e uno switch controllato da SDN, opera attraverso TCP con porta 6653. Tra i messaggi inviati dal controller
 allo switch figurano:
 \begin{itemize}
 \item Configurazione: per fare query e settare i parametri di configurazione di uno switch.
@@ -197,13 +197,13 @@ Tra i messaggi inviati dallo switch al controller figurano:
 \section{ICMP il protocollo di internet control message}
 Il protocollo di internet control message \`e utilizzato da host e router per comunicare informazioni di livello di rete tra di loro. L'utilizzo pi\`u comune \`e il report degli errori.  Architetturalmente si trova appena
 sopra IP in quanto messaggi ICMP sono spostati come payload di IP. Quando un host riceve un datagramma IP con ICMP specificato come il protocollo di livello superiore (con numero 1) fa demultiplexing a 
-ICMP. I messaggi ICMP hanno un tipo e in campo di codice e congengono l'header e i primi 8 bytes del datagramma IP che ha causato la generazione del messaggio in modo che il mittente pu\`o determinare
+ICMP. I messaggi ICMP hanno un tipo e in campo di codice e contengono l'header e i primi 8 bytes del datagramma IP che ha causato la generazione del messaggio in modo che il mittente pu\`o determinare
 quale datagramma ha generato l'errore.  
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{ICMPValues.png}
 \caption{Tipi di messaggio ICMP}
 \end{figure}
-Traceroute utilizza questi messaggi generando pacchetti UDP con TLL incrementale su una porta strana fino a che arriva a ricevere un messaggio ICMP di tipo 3 con codice 3.
+Traceroute utilizza questi messaggi generando pacchetti UDP con TLL incrementale su una con range tra 33434 e 33534 fino a che arriva a ricevere un messaggio ICMP di tipo 3 con codice 3.
 \section{Gestione della rete e SNMP}
 La gestione della rete include distribuzione, integrazione e coordinazione dell'hardware, software e elementi umani per monitorare, testare, sondare, configurare, analizzare, valutare e controllare la rete e le
 risorse elementari in tempo reale, con prestazioni operazionali e servizio di qualit\`a ad un costo ragionevole. 
@@ -227,8 +227,8 @@ per modificare oggetti MIB. Viene anche utilizzato per mandare trap message al m
 richiesti sono specificati nella porzione di variable binding. L'agente risponde con una PDU di risposta che contiene gli identificatori degli oggetti e i valori associati.
 \item Il PDU \emph{SetRequest} \`e utilizzato dal managing server per settare i valori di uno o pi\`u oggetti MIB in un managed device. UN agente risponde con un PDU di risposta con lo status di errore
 noError per confermare che il valore \`e stato settato. 
-\item Il PDU \emph{InformationRequest} \`e utilizzato dal managing server per notificare un altro managing server di informaizoni MIB che sono remote al server destinatario.
-\item Il PDI \emph{Response} \`e tipicamente mandato da un managed defivse in risposta ad un request message ritornando le informazioni richieste.
+\item Il PDU \emph{InformationRequest} \`e utilizzato dal managing server per notificare un altro managing server di informazioni MIB che sono remote al server destinatario.
+\item Il PDI \emph{Response} \`e tipicamente mandato da un managed device in risposta ad un request message ritornando le informazioni richieste.
 \item Il tipo finale \`e il trap message, sono generati asincronamente, ovvero non sono generati in risposta a richieste ma in risposta a eventi per i quali il server richiede notifica. 
 \end{itemize}
 Sono tipicamente trasmessi attraverso UDP.

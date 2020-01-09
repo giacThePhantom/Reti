@@ -1,6 +1,6 @@
 \chapter{Transport Layer}
 \section{Introduzione}
-Il livello di trasporto ha il compito di mettere a disposizione la comunicazione direttamente tra i servizi applicativi eseguiti su i diversi host. Il 
+Il livello di trasporto ha il compito di mettere a disposizione la comunicazione direttamente tra i servizi applicativi eseguiti sui diversi host. Il 
 livello di trasporto mette a disposizione comunicazione logica tra i processi applicativi, ovvero permette a questi processi di operare come se fossero 
 direttamente connessi. I protocolli di livello di trasporto sono implementati negli end systems ma non nei routers di rete. Sul lato inviante il protocollo
 trasforma il messaggio di livello applicativo in un pacchetto transport-layer conosciuto come segmento. Questo pu\`o essere fatto dividendo il messaggio in 
@@ -12,7 +12,7 @@ livello applicativo.
 Se un protocollo di trasporto mette a disposizione comunicazione logica tra i processi i livelli di rete mettono a disposizione comunicazione logica tra i
 diversi host. I protocolli di trasporto si trovano negli end systems e al loro interno muovono messaggi da processi applicativi al network edge e viceversa
 ma non possono determinare come questi messaggi sono spostati nel network core. I servizi del livello di trasporto sono vincolati dalle politiche dei 
-livelli di rete. Esistono comunque servizi che queste ultime non mettono a disposizione ma implementati unicamente dai protocolli di trasporto: come 
+livelli di rete. Esistono comunque servizi che queste ultime non mettono a disposizione ma implementati unicamente dai protocolli di trasporto come 
 affidabilit\`a e criptazione. 
 \subsection{Livello di trasporto nell'internet}
 L'internet mette a disposizione due protocolli per il livello di trasporto: UDP (user datagram protocol) che \`e un servizio connectionless e non affidabile 
@@ -30,7 +30,7 @@ UDP non \`e regolato.
 \section{Multiplexing e demultiplexing}
 All'host di destinazione il livello di trasporto riceve segmenti dal livello di rete e deve inviarli al livello applicativo del processo corretto. Si 
 ricordi come ogni processo pu\`o avere pi\`u socket. Il livello di trasporto consegna i dati a questi socket, ognuno dei quali provvisto di un 
-identificatore univoco. Il formato di questi idendificatore dipende dal protocollo utilizzato. In modo che un host ricevente sia in grado di dirigere un 
+identificatore univoco. Il formato di questi identificatore dipende dal protocollo utilizzato. In modo che un host ricevente sia in grado di dirigere un 
 segmento verso il socket appropriato possiede una serie di campi nell'header atti a questo scopo. Al lato ricevente l'host esamina questi campi per 
 identificare il socket ricevente dove lo dirige. Questo processo \`e chiamato demultiplexing. Il processo di multiplexing consiste nel raccogliere chunks di 
 dati dall'host sorgente da diversi socket, incapsularli con le informazioni header necessarie per creare i segmenti e poi passarli al livello di rete \`e 
@@ -41,7 +41,7 @@ Risulta ora banale il demultiplexing: quando il livello di trasporto riceve un s
 \subsection{Connectionless multiplexing e demultiplexing}
 Quando un socket UDP \`e creato il livello di trasporto gli assegna una porta casuale che non sta venendo utilizzata da nessun altro socket. Si supponga che
 in un Host A con porta UDP 19157 si vuole inviare un chunk di dati ad un processo UDP in Host B con porta 46428, il livello di trasporto in A crea un 
-segmento che include i dati, la porta di source e la porta di destinazione e altri due valori. Il layer di trasporto lo passa poi al netwok layer che 
+segmento che include i dati, la porta di source e la porta di destinazione e altri due valori. Il layer di trasporto lo passa poi al network layer che 
 incapsula a sua volta il messaggio in un datagramma IP e tenta di consegnarlo al ricevente il cui transport layer legge la porta di destinazione a cui 
 consegna il segmento al socket corrispondente. Host B pertanto compie il demultiplexing per consegnarlo al socket corretto. Si noti come un socket UDP \`e
 completamente identificato da una tupla che consiste di un indirizzo IP di destinazione e o source port number. Pertanto se due segmenti hanno questi campi
@@ -65,12 +65,12 @@ Un esempio di un protocollo applicativo che utilizza UDP \`e il DNS. I vantaggi 
 \item Maggiore controllo a livello di applicazione verso quali dati sono inviati e quando: con UDP appena un processo applicativo gli invia dati questi
 vengono inviati, mentre il sistema di congestion control di TCP potrebbe rallentare questo processo. Viene pertanto utilizzato, con alcuni miglioramenti, 
 per applicazioni a tempo reale.
-\item Nessun connection establishment: e pertanto \`e pi\`u efficente di TCP.
+\item Nessun connection establishment: e pertanto \`e pi\`u efficiente di TCP.
 \item Nessun stato di connessione: non dovendo mantenere nessun stato riguardo la connessione un server che utilizza UDP pu\`o avere pi\`u utenti 
 concorrenti.
 \item Piccolo overhead per i pacchetti: il segmento UDP ha un header di soli 8 bytes. 
 \end{itemize}
-L'assenza del congesion control potrebbe comunque portare a grandi quantit\`a di perdita dati e il sovraaffolamento di link. Data transfer pu\`o essere 
+L'assenza del congestion control potrebbe comunque portare a grandi quantit\`a di perdita dati e il sovraffollamento di link. Data transfer affidabile pu\`o essere 
 implementato anche con UDP se questo particolare viene implementato al livello applicativo. 
 \subsection{Struttura dei segmenti UDP}
 Il segmento UDP \`e composto da un campo dati che contiene il messaggio del livello applicativo. L'header possiede solo quattro campi, ognuno costituito da
@@ -92,36 +92,40 @@ Quando il canale \`e perfettamente affidabile il protocollo accetta dati dal liv
 canale. Sul lato di ricezione il protocollo riceve un pacchetto dal livello sottostante, rimuove i dati dal pacchetto e li invia al livello soprastante. 
 \subsubsection{Data transfer affidabile attraverso un canale con errori bit}
 In questo caso nel canale possono essere corrotti dei bit. Questo tipo di errori accadono tipicamente nei componenti fisici. Per gestire questi errori 
-si rende necessario un protocollo ARQ (automatic repeat request), che fa degli aknowledgments sia in caso di ricezione positiva che negativa. Oltre agli
-aknowledgments il protocollo deve essere in grado:
+si rende necessario un protocollo ARQ (automatic repeat request), che fa degli acknowledgments sia in caso di ricezione positiva che negativa. Oltre agli
+acknowledgments il protocollo deve essere in grado:
 \begin{itemize}
 \item Error detection: bit esterni ai dati vengono aggiunti nel pacchetto e sono inviati dal mittente nel campo checksum per trovare se esistono degli 
 errori.
 \item Receiver feedback: l'unico modo per il mittente di conoscere lo stato del ricevente \`e se questo gli invia del feedback positivo (ACK) o negativo
 (NAK), che in questo caso devono essere lunghi un solo bit. 
-\item Retransmission: un pacchetto ricevuto con errore deve essere reinviato al destinatario. 
+\item Retransmission: un pacchetto ricevuto con errore deve essere rinviato al destinatario. 
 \end{itemize}
 Quando il protocollo di invio deve inviare un messaggio aspetta che questo gli arrivi dai livelli superiori, quando lo riceve lo incapsula in un pacchetto
 contenente anche il checksum e invia il pacchetto. A questo punto aspetta la ricezione di un ACK o un NAK. In caso del primo si rimette in attesa di un 
-nuovo messaggio, altrimenti reinvia il messaggio precedente. Quando sta aspettando per l'acknowledgment non pu\`o ricevere altri messaggi dai livelli 
+nuovo messaggio, altrimenti rinvia il messaggio precedente. Quando sta aspettando per l'acknowledgment non pu\`o ricevere altri messaggi dai livelli 
 superiori, pertanto questo protocollo \`e conosciuto come stop-and-wait. Dal lato ricezione quando viene ricevuto un pacchetto si controlla per gli errori
-e si invia l'acknowledgment appropriato. Se il mittente riceve un messaggio di acknowledgment corrotto reinvia il pacchetto e per questo errore viene 
-introdotto il campo dei sequence number nel pacchetto, in modo da capire se il pacchetto \`e una retrasmissione o no. Vengono pertanto utilizzati gli 
+e si invia l'acknowledgment appropriato. Se il mittente riceve un messaggio di acknowledgment corrotto rinvia il pacchetto e per questo errore viene 
+introdotto il campo dei sequence number nel pacchetto, in modo da capire se il pacchetto \`e una ritrasmissione o no. Vengono pertanto utilizzati gli 
 acknowledgments sia per il mittente che per il destinatario: quando un pacchetto out-of-order \`e ricevuto il destinatario invia un ACK per il pacchetto, 
 quando riceve un pacchetto corrotto invia un NAK. Un mittente che riceve due ACK per lo stesso pacchetto sa che il destinatario non ha ricevuto 
 correttamente il pacchetto seguente a quello ACKato due volte. 
 \subsubsection{Data transfer affidabile attraverso un canale con errori bit che pu\`o perdere pacchetti}
 Oltre a corrompere pacchetti questo canale pu\`o anche perderli. Si deve pertanto decidere cosa fare quando vengono persi dei pacchetti e cosa fare quando
-questo succede. Quest ultimo problema \`e risposto dalle tecniche precedenti. Quando un pacchetto \`e perso il mittente non riceve nessuna risposta, 
-pertanto deve aspettare fino a che \`e certo che il pacchetto sia stato perso e reinviarlo. I metodi visti precedentemente sanno gestire i pacchetti 
+questo succede. Quest ultimo problema \`e gestito dalle tecniche precedenti. Quando un pacchetto \`e perso il mittente non riceve nessuna risposta, 
+pertanto deve aspettare fino a che \`e certo che il pacchetto sia stato perso e rinviarlo. I metodi visti precedentemente sanno gestire i pacchetti 
 duplicati, pertanto i falsi positivi non sono un problema.
 \subsection{Pipelined data transfer protocols}
 Il problema con i protocolli precedenti \`e il fatto che sono stop and wait. Definita come utilization del mittente come la frazione di tempo in cui \`e 
-impegnato ad inviare bit nella rete questo tipo di protocolli hanno $U_{sender}=\dfrac{packet\ size}{transmission\ rate\cdot round\ trip\ time}+
-\dfrac{packet\ size}{transmission\ rate}$ che si nota essere una percentale molto piccola del tempo di trasmissione totale. Per gestire questo problema
+impegnato ad inviare bit nella rete questo tipo di protocolli hanno 
+\begin{equation*}
+U_{sender}=\dfrac{packet\ size}{transmission\ rate\cdot round\ trip\ time}+
+\dfrac{packet\ size}{transmission\ rate}
+\end{equation*}
+ che si nota essere una percentuale molto piccola del tempo di trasmissione totale. Per gestire questo problema
 il mittente pu\`o inviare pacchetti multipli senza attendere una risposta con una tecnica conosciuta come pipelining che causa nel protocollo:
 \begin{itemize}
-\item Il range dei sequence numbero deve essere aumentato in quanto ogni pacchetto in transito deve avere un'identificatore unico. 
+\item Il range dei sequence number deve essere aumentato in quanto ogni pacchetto in transito deve avere un'identificatore unico. 
 \item Mittente e destinatario devono poter fare del buffer su pi\`u pacchetti, quelli inviati ma su cui non \`e stato fatto acknowledgment e quelli ricevuti
 correttamente dal destinatario.
 \item Il range dei sequence number dipende su come il protocollo risponde a pacchetti persi o corrotti. 
@@ -132,7 +136,7 @@ pacchetti senza acknowledgement. Definita $base$ come il sequence number del pac
 sequence number non utilizzato possono essere identificati quattro intervalli tra i sequence number:
 \begin{itemize}
 \item $[0, base-1]$ sono i pacchetti trasmessi e con acknowledgment.
-\item $[base, nextseqnum-1]$ sono i pacchetti trasmessi ma seacknowledgment.
+\item $[base, nextseqnum-1]$ sono i pacchetti trasmessi ma senza acknowledgment.
 \item $[nextseqnum, base+N-1]$ sono i sequence number che possono essere utilizzati per pacchetti che si possono spedire immediatamente.
 \item $[base+N, \infty[$ sono i pacchetti che non possono essere utilizzati fino a che non ritorna l'acknowledgment di un pacchetto nella pipeline ($base$).
 \end{itemize}
@@ -144,15 +148,15 @@ acknowledgment e se non succede crea e invia i pacchetto, altrimenti ritorna i d
 sincronizzato di flag che permette la chiamata del metodo solo quando la window non \`e piena.
 \item Receipt of an ACK: nel protocollo GBN un ACK per un pacchetto con sequence number $n$ viene considerato come un acknowledgment cumulativo, vale a dire
 che tutti i pacchetti con sequence number minore uguale a $n$ sono stati ricevuti.
-\item A timeout event: se accade un timeout il mittente reinvia tutti i pacchetti che sono stati inviati ma che non hanno ricevuto un acknowledgment.
+\item A timeout event: se accade un timeout il mittente rinvia tutti i pacchetti che sono stati inviati ma che non hanno ricevuto un acknowledgment.
 \end{itemize}
-Dalla parte del mittente quando questo riceve un pacchetto corretto ritorna un ACK con il sequence number, altrimenti lo eliimina e invia un ACK per il
+Dalla parte del mittente quando questo riceve un pacchetto corretto ritorna un ACK con il sequence number, altrimenti lo elimina e invia un ACK per il
 pacchetto precedente. In questo protocollo pacchetti non in ordine sono scartati in modo da semplificare il buffer del destinatario.
 \subsection{Selective repeat}
-Quando la window del GBN \`e larga pu\`o succedere che il protocollo sia costretto a retrasmettere molti pacchetti. Il protocollo selective repeat evita
-retrasmissioni non necessarie facendo in modo che il mittente reinvii solo i pacchetti che sono stati persi o ricevuti corrotti dal mittente. Viene ancora
+Quando la window del GBN \`e larga pu\`o succedere che il protocollo sia costretto a ritrasmettere molti pacchetti. Il protocollo selective repeat evita
+ritrasmissioni non necessarie facendo in modo che il mittente rinvii solo i pacchetti che sono stati persi o ricevuti corrotti dal mittente. Viene ancora
 utilizzata una window $N$ per limitare il numero di pacchetti senza acknowledgment. Il destinatario quando riceve un pacchetto non in ordine fa 
-acknowledgment e lo salva in un buffer fino a che non sono ricevuti tutti i pacchetti necessari. Si defisce pertanto $rcv_base$ come il sequence number
+acknowledgment e lo salva in un buffer fino a che non sono ricevuti tutti i pacchetti necessari. Si definisce pertanto $rcv\_base$ come il sequence number
 del primo pacchetto mancante. Le azioni del mittente sono:
 \begin{itemize}
 \item Dati ricevuti dai livelli superiori: quando riceve dei dati il protocollo controlla per il prossimo sequence number, se la window lo permette crea il
@@ -191,38 +195,43 @@ rete dove \`e incapsulato con il datagramma IP che \`e poi inviato nella rete. Q
 l'applicazione legge lo stream dei dati da questo buffer. 
 \subsection{Struttura dei segmenti TCP}
 I segmenti TCP consistono un header e dati. I dati di livello applicativo, se troppo grandi sono divisi in chunk di dimensione $MSS$, cosa a volte non 
-necessaria. Come UDP l'header contiene: source e destination port numbers per il multiplexing, demultiplexing, un campo checksum e oltre a questi:
+necessaria. L'header contiene: source e destination port numbers per il multiplexing, demultiplexing, un campo checksum e oltre a questi:
 \begin{itemize}
 \item Il campo sequence number di 32 bit e il 32 bit acknowledgement number field per implementare un data transfer affidabile.
 \item La receive window di 16 bit per il flow control, per indicare il numero di byte che un destinatario \`e disposto a ricevere.
 \item I campi delle opzioni opzionali e di lunghezza variabile utilizzati per negoziare $MSS$ o come un fattore di scalatura della window e un timestamp.
-\item Il campo delle flag contiene 6 bit il bit ACK per indicare che il valore contenuto nel campo acknowledgement \`e valida, ovvero se il segmento 
-contiene un acknowledgementper un segmento che \`e stato correttamente ricevuto, i bit RST, SYN e FIN sono utilizzati per il setup e teardown della 
-connessione, CWR e ECE sono utilizzati in esplicite notifiche di congestion, il PSH che dice che il ricevente deve inviare i dati all'application layer
-immediatamente e il bit URG che marca il segmento come contenente dati urgenti.  
+\item Il campo delle flag ha dimensione 6 bit e contiene: 
+\begin{itemize}
+\item Il bit ACK per indicare che il valore contenuto nel campo acknowledgement \`e valida, ovvero se il segmento 
+contiene un acknowledgement per un segmento che \`e stato correttamente ricevuto.
+\item I bit RST, SYN e FIN sono utilizzati per il setup e teardown della 
+connessione.
+\item CWR e ECE sono utilizzati in esplicite notifiche di congestion.
+\item Il PSH che impone al ricevente di inviare i dati all'application layer
+immediatamente.
+\item Il bit URG che marca il segmento come contenente dati urgenti. 
+\end{itemize}
 \end{itemize}
 \subsubsection{Sequence numbers e acknowledgement numbers}
 Questi due campi sono chiave per il data transfer affidabile. Si consideri ora cosa TCP mette in questi campi: TCP considera i dati come uno stream di bytes 
 non strutturato e non ordinato. L'uso dei sequence number riflette questa cosa in quanto questi numeri sono rispetto allo stream di bytes trasmessi e non
-riguardo ai segmenti. Il sequence number per un segmento \`e il numero byte-stream del primo byte nel segmento che viene inserito nel campo dell'header
-appropriato. Il numero di acknowledgement che A mette nel segmento \`e il sequence number del prossimo byte che A si aspetta di ricevere pertanto TCP 
-acknowledges bytes fino al primo byte mancante \`e detto di mettere a disposizione un sistema di acknowledgement cumulativi. Non \`e specificato cosa
+riguardo ai segmenti. Il sequence number di un segmento \`e il numero byte-stream del primo byte del payload. Il numero di acknowledgement per un ACK di un segmento \`e il sequence number del prossimo byte che ci si aspetta di ricevere. Nel TCP quando si riceve un acknowledgement per un byte vuol dire che tutti i byte precedenti sono stati ricevuti correttamente. Questo sistema si dice di acknowledgement cumulativi. Non \`e specificato cosa
 fare in caso di segmenti non in ordine, ma viene implementata la scelta che non li scarta. Il numero iniziale della sequenza \`e scelto casualmente in modo
 da minimizzare i casi di sequence number uguali per segmenti provenienti da diverse connessioni. 
 \subsection{Stima del Round-trip time e timeout}
-TCP utilizza un sistema di timeout/retrasmissione per recuperare i pacchetti persi. Chiaramente questo timeout deve essere maggiore del round-trip time 
-(RTT) come gestire i time TCP \`e stabilito nel RFC 6298.
+TCP utilizza un sistema di timeout/ritrasmissione per recuperare i pacchetti persi. Chiaramente questo timeout deve essere maggiore del round-trip time 
+(RTT) come gestire i timeout TCP \`e stabilito nel RFC 6298.
 \subsubsection{Stimare il round-trip time}
 Si intende per $sampleRTT$ per un segmento come il tempo intercorso tra l'invio del segmento e la ricezione dell'acknowledgment. La maggior parte delle 
 implementazioni TCP prendono un unica misura di RTT alla volta, ovvero ad ogni istante il $sampleRTT$ \`e stimato unicamente per uno dei pacchetti trasmessi
-senza acknowledgment portando ad un nuovo valore di esso per ogni RTT e non computa tale valore per i pacchetti retrasmessi. I valori di $sampleRTT$ 
+senza acknowledgment portando ad un nuovo valore di esso per ogni RTT e non computa tale valore per i pacchetti ritrasmessi. I valori di $sampleRTT$ 
 varieranno per ogni segmento a causa della congestione dei router e dei payload sugli end-systems, pertanto per valutare un tipico RTT viene presa una media
-tra tutti i $sampleRTT$. Pertanto TCP mantiene una media chiamata $estimatedRTT$ dei $sampleRTT$ calcolata come $estimatedRTT=(1-\alpha)estimatedRTT+\alpha
-sampleRTT$, ovvero una combinazione pesata tra i due valori (con $\alpha=0.125$ consigliato). Si nota come questa combinazione mette particolare attenzione
+tra tutti i $sampleRTT$. Pertanto TCP mantiene una media chiamata $estimatedRTT$ dei $sampleRTT$ calcolata come $$estimatedRTT=(1-\alpha)estimatedRTT+\alpha
+sampleRTT$$, ovvero una combinazione pesata tra i due valori (con $\alpha=0.125$ consigliato). Si nota come questa combinazione mette particolare attenzione
 verso i nuovi $sampleRTT$ in quanto riflettono meglio la situazione attuale. Questo tipo di media \`e chiamata exponential weighted moving average (EWMA) in
-quanto il peso di un $sampleRTT$ decade esponenzialmente con l'aggiunta di nuovi valori. Oltre a questa stima \`e utile misurare la variabilit\`a di RTT, 
-definita come $devRTT$, una misura di quanto un $estimateRTT$ varia rispetto a $estimatedRTT$ e calcolata come $devRTT=(1-\beta)devRTT+\beta|sampleRTT-
-estimatedRTT|$, si noti come questo valore \`e una EWMA della differenza tra $estimatedRTT$ e $sampleRTT$, il valore raccomandato di $\beta$ \`e $0.25$.
+quanto il peso di un $sampleRTT$ decade esponenzialmente con l'aggiunta di nuovi valori. Oltre a questa stima \`e utile misurare la varianza di RTT, 
+definita come $devRTT$, una misura di quanto un $estimateRTT$ varia rispetto a $estimatedRTT$ e calcolata come $$devRTT=(1-\beta)devRTT+\beta|sampleRTT-
+estimatedRTT|$$, si noti come questo valore \`e una EWMA della differenza tra $estimatedRTT$ e $sampleRTT$, il valore raccomandato di $\beta$ \`e $0.25$.
 \subsubsection{Settare e gestire il Timeout Retransmission Interval}
 Il valore di un intervallo di timeout deve essere sicuramente maggiore di $estimatedRTT$, ma non cos\`i tanto da rendere la comunicazione inefficiente.
 Si deve sommare pertanto a $estimatedRTT$ pi\`u un margine, la cui grandezza dipende dalle fluttuazioni di RTT, pertanto $TimeoutInterval=estimatedRTT+
@@ -230,19 +239,19 @@ Si deve sommare pertanto a $estimatedRTT$ pi\`u un margine, la cui grandezza dip
 l'intervallo viene ricomputato utilizzando la formula.
 \subsection{Data transfer affidabile}
 TCP crea un servizio di data transfer affidabile sopra un servizio inaffidabile del servizio IP di best-effort. Il servizio TCP garantisce che lo stream dei
-dati che un processo legge dal buffer \`e non corrotto, senza buchi e duplicati e in sequenza. Il timer di ritrasmissione \`e unico per tutti i segmenti Si 
+dati che un processo legge dal buffer \`e non corrotto, senza buchi e duplicati e in sequenza. Il timer di ritrasmissione \`e unico per tutti i segmenti. Si 
 supponga che i dati vengano inviati unicamente da A a B. In una prima discussione verranno utilizzati unicamente i timeout per recuperare i pacchetti persi.
 Si nota che ci sono tre eventi che possono accadere nel sender: dati ricevuti dal livello applicativo, timer timeout e ACK. Quando TCP riceve dati dal
 livello applicativo li incapsula in un segmento e li invia al livello di rete. Si nota come ogni segmento contenga un sequence number che \`e il byte-stream
 number del primo byte contenuto e se il timer non \`e gi\`a stato avviato da qualche altro segmento TCP lo avvia quando il segmento \`e stato inviato al
 livello inferiore. Il secondo evento \`e il timeout: in questo caso TCP ritrasmette il pacchetto e riavvia il timer. Il terzo evento \`e la ricezione di un 
-ACK: lo compara con il valore $sendBase$ , ovvero il sequence numbero del pi\`u vecchio byte senza acknowledgment e utilizzando acknowledgment cumulativo
-ne aggiorna il valore se il valore dell ACK \`e del pacchetto successivo a quello di $sendBase$. 
+ACK: lo compara con il valore $sendBase$ , ovvero il sequence number del pi\`u vecchio byte senza acknowledgment e utilizzando acknowledgment cumulativo
+ne aggiorna il valore se il valore dell' ACK \`e del pacchetto successivo a quello di $sendBase$. 
 \subsubsection{Raddoppiare l'intervallo di timeout}
 Ogni volta che accade un timeout l'intervallo di timeout viene raddoppiato invece di calcolarlo come visto precedentemente in modo da mettere a disposizione
 una forma limitata di congestion control. 
-\subsubsection{Retrasmissione veloce}
-Un problema con la retrasmissione govenata da timeout \`e che quest ultimo pu\`o essere relativamente lungo aumentanto il ritardo end-to-end, pertanto il 
+\subsubsection{Ritrasmissione veloce}
+Un problema con la ritrasmissione governata da timeout \`e che quest ultimo pu\`o essere relativamente lungo aumentando il ritardo end-to-end, pertanto il 
 mittente utilizza un altro sistema per determinare la perdita di pacchetti chiamato ACK duplicato. Un ACK duplicato \`e un pacchetto che rifa acknowledgment
 su un pacchetto che ha gi\`a ricevuto un acknowledgment precedente. Si consideri pertanto la seguente tabella di politica di generazione degli ACK per
 un destinatario:
@@ -251,10 +260,10 @@ un destinatario:
 \hline
 Event & Azione del destinatario TCP\\
 \hline
-\makecell{Arrivo in-ordine di un \\segmento tutti i dati fino a quel\\ sequence number sono stati\\ acknowledgment} & \makecell{ACK ritardato: aspetta per 
+\makecell{Arrivo in-ordine di un \\segmento tutti i dati fino a quel\\ sequence number sono stati\\ acknowledged} & \makecell{ACK ritardato: aspetta 
 \\l'arrivo di un altro segmento \\ in ordine (500 msec),\\ se non succede invia un ACK}\\
 \hline
-\makecell{Arrivo in-ordine di un \\segmento si trova un altro\\ segmento in order\\ senza acknowledgment} & \makecell{Sendi un ACK cumulativo\\ACKing 
+\makecell{Arrivo in-ordine di un \\segmento con la presenza di un altro\\ segmento in order\\ senza acknowledgment} & \makecell{Invia un ACK cumulativo\\ACKing 
 entrambi i segmenti}\\
 \hline
 \makecell{Arrivo di un segmento\\out-of-order, con sequence number\\maggiore, gap trovato} & \makecell{Invia un ACK duplicato\\indicando il sequence
@@ -265,7 +274,7 @@ entrambi i segmenti}\\
 \end{tabular}
 \end{center}
 Si nota come quando un destinatario riceve un segmento out-of-order rifa acknowledgment dell'ultimo segmento in-order ricevuto. Se il mittente riceve tre
-ACK duplicati per lo stesso segmento considera che il segmento immediatamente successivo a quello ACKed \`e stato perso e compie una retrasmissione prima
+Quando si ricevono ACK duplicati per lo stesso segmento si considera il segmento immediatamente successivo come perso e viene compiuta una ritrasmissione prima
 del timeout. Si nota come il meccanismo per la gestione degli errori \`e un misto tra i protocolli GBN e SR. 
 \subsection{Flow control}
 Si noti come ogni host TCP crea un buffer di ricezione per la connessione e quando la connessione TCP riceve dati che sono corretti e in ordine li posiziona
@@ -282,7 +291,7 @@ lastByteRead)$ e il valore di questa variabile cambia per tutta la durata della 
 receive window $rwnd$ in ogni segmento che invia ad A. Inizialmente $rwnd=rcvBuffer$. Host A tiene in considerazione due variabili: $LastByteSent$ e 
 $LastByteACKed$ la cui differenza \`e la quantit\`a di dati senza acknowledgment che A ha inviato nella connessione. Mantenendo questa differenza minore di
 $rwnd$ si assicura l'assenza di overflow. Esiste un problema con questo schema: se il buffer \`e pieno e pertanto $rwnd=0$ e si supponga che dopo aver
-avvisato che \`e pieno B non debba pi\`u mandare niente ad A, pertanto mentre B svuota il buffer non verr\`a noficato A che si \`e liberato dello spazio.
+avvisato che \`e pieno B non debba pi\`u mandare niente ad A, pertanto mentre B svuota il buffer non verr\`a notificato A che si \`e liberato dello spazio.
 Per risolvere questo problema quanto $rwnd=0$ A continua a mandare segmenti con un data byte su cui sar\`a fatto acknowledgment da B, notificando pertanto A
 quando si libera dello spazio. 
 \subsection{TCP Connection Management}
@@ -290,7 +299,7 @@ Si consideri come una connessione TCP \`e inizializzata: si supponga di avere un
 server. Il primo informa il client TCP che vuole iniziare una comunicazione con il secondo. Il client TCP inizializza la connessione con il server TCP in
 questo modo:
 \begin{itemize}
-\item Il TCP client-side invia un segmento speciale al TCP server-side che non contiene nessun informazione del livello applicativo. La flag dell'header TCP
+\item Il TCP client-side invia un segmento speciale al TCP server-side che non contiene nessun informazione del livello applicativo. Il flag dell'header TCP
 SYN \`e settato a 1 (chiamato segmento SYN). Oltre a questo il client sceglie un sequence number randomico iniziale ($client_isn$) e lo mette nel campo 
 sequence number del segmento SYN che \`e incapsulato in un datagramma IP e inviato al server. 
 \item Una volta che il diagramma IP arriva al server questo ne estrae il segmento SYN, alloca il buffer TCP e i parametri di connessione e invia un segmento
@@ -303,15 +312,16 @@ SYNACK con il valore $server_isn+1$ nel campo acknowledgment e con flag SYN a 0.
 Una volta che questi tre segmenti sono stati inviati e ricevuti (three-way handshake) pu\`o iniziare la comunicazione tra client e server. Ognuna delle due
 parti pu\`o terminare la connessione quando necessario. Quando quando questo succede buffer e variabili sono deallocate. Quando il client vuole terminare la
 connessione invia un segmento speciale con il flag FIN settato a 1 a cui il server fa acknowledgment. Successivamente il server manda il proprio segmento di 
-terminazione e il clien fa acknowledgment. A questo punto entrambi deallocano le risorse. Durante la vita di una connessione TCP il protocollo in ogni host
+terminazione (con FIN settato) e il client fa acknowledgment. A questo punto entrambi deallocano le risorse. Durante la vita di una connessione TCP il protocollo in ogni host
 fa delle transizioni tra stati TCP: il client TCP inizia nello stato CLOSED, poi l'applicazione inizia una connessione che causa l'invio del segmento SYN e 
 a TCP di entrare nello stato SYN\_SENT dove aspetta per l'acknowledgment che lo fa entrare nello stato ESTABLISHED. Quando il client vuole terminare la 
 comunicazione invia il segmento con il bit FIN a 1 ed entra nello stato FIN\_WAIT\_1 dove aspetta l'acknowledgment; quando lo riceve entra nello stato 
-FIN\_WAIT\_2 dove aspetta il segmento di chiusura del server che causa la transizione nello stato TIME\_WAIT che permette di reinviare l'ACK finale se \`e 
-stato perso (dai 30 secondi ai 2 minuti), successivamente entra nello stato CLOSED. Se non c'\`e un socket sulla porta indicata all'inizio della discussione
-viene inviato un pacchetto con il flag RST in modo che il client non reinvii il segmento. 
+FIN\_WAIT\_2 dove aspetta il segmento di chiusura del server che causa la transizione nello stato TIME\_WAIT che permette di rinviare l'ACK finale se \`e 
+stato perso (dai 30 secondi ai 2 minuti), successivamente entra nello stato CLOSED. Il server
+pu\`o decidere di chiudere la comunicazione in modo "rude": dealloca le risorse e chiude la porta. Quando il client tenta di comunicare su quella porta il pacchetto viene bloccato dal
+server e viene ritornato un segmento con il flag RST settato.
 \section{Principi di congestion control}
-Per gestire la congesione della rete si devono rallentare i mittenti che operano in tale rete. 
+Per gestire la congestione della rete si devono rallentare i mittenti che operano in tale rete. 
 \subsection{Cause e costi della congestione}
 Si considerino ora tre casi in cui pu\`o avvenire della congestione. 
 \subsubsection{Due mittenti, router con buffer infiniti}
@@ -325,18 +335,18 @@ throughput \`e uguale al tasso di invio e il delay rimane un numero finito.  Qua
 arrivano a velocit\`a simile alla capacit\`a del link si ha esperienza di grandi ritardi causati dalle code sui router. 
 \subsubsection{Due mittenti, router con buffer finiti}
 Si modifichi lo scenario precedente considerando buffer finiti: si assuma una connessione affidabile e un pacchetto che entra in un buffer pieno viene
-perso. Se un pacchetto viene perso verr\`a eventualmente retrasmesso. Si differenzi pertanto tra il tasso di trasmissione di dati originali come $
+perso. Se un pacchetto viene perso verr\`a eventualmente ritrasmesso. Si differenzi pertanto tra il tasso di trasmissione di dati originali come $
 \lambda_{in}\frac{bytes}{sec}$ e quello totale come $\lambda'_{in}\frac{byytes}{sec}$ chiamato come offered load alla rete. Le prestazioni definite nello 
-scenario precedente dipenderanno to ora fortemente da come avviene la retrasmissione. Se A fosse capace di stabilire quando un buffer \`e pieno $
-\lambda_{in}=\lambda'_{in}$ e il throughput della connnessione sarebbe $\lambda_{in}$ in questo caso il tasso di invio non pu\`o superare $\frac{R}{2}$. Si 
-consideri il caso in cui il mittente reinvia il pacchetto \`e dato certamente per perso, si consideri un'offered load $\lambda'_{in}=\frac{R}{2}$, a questo 
-valore il tasso di ricezione di dati reali per il destinatario \`e $\frac{R}{3}$, pertanto sui $0.5R$ dei dati trasmessi $0.1\bar{6}R$ sono restrasmessi. Si 
-nota pertanto ulteriore costi di una rete congesionata: la retrasmissione di pacchetti persi dovuta al buffer overflow e il reinvio di pacchetti in coda nel
-router dati per persi che pertanto vengono reinviati fino al destinatario che li scarta (se succede per ogni pacchetto il throughput avr\`a un valore
+scenario precedente dipenderanno ora fortemente da come avviene la ritrasmissione. Se A fosse capace di stabilire quando un buffer \`e pieno $
+\lambda_{in}=\lambda'_{in}$ e il throughput della connessione sarebbe $\lambda_{in}$ in questo caso il tasso di invio non pu\`o superare $\frac{R}{2}$. Si 
+consideri il caso in cui il mittente rinvia il pacchetto \`e dato certamente per perso, si consideri un'offered load $\lambda'_{in}=\frac{R}{2}$, a questo 
+valore il tasso di ricezione di dati reali per il destinatario \`e $\frac{R}{3}$, pertanto sui $0.5R$ dei dati trasmessi $0.1\bar{6}R$ sono ritrasmessi. Si 
+nota pertanto ulteriore costi di una rete congestionata: la ritrasmissione di pacchetti persi dovuta al buffer overflow e il rinvio di pacchetti in coda nel
+router dati per persi che pertanto vengono rinviati fino al destinatario che li scarta (se succede per ogni pacchetto il throughput avr\`a un valore
 asintotico di $\frac{R}{4}$).
 \subsubsection{Quattro mittenti, router con buffer finiti e cammini multihop}
 In questo scenario quattro host trasmettono dati ognuno attraverso sovrapposti cammini a due hops. Si assume che ogni host utilizza un meccanismo di 
-timeout/retrasmissione per implementare un data transfer affidabile, che hanno tutti lo stesso valore $\lambda_{in}$ e tutti i router hanno capacit\`a
+timeout/ritrasmissione per implementare un data transfer affidabile, che hanno tutti lo stesso valore $\lambda_{in}$ e tutti i router hanno capacit\`a
 $R\frac{bytes}{sec}$. Si consideri la connessione tra A e C che passa tra i router $R_1$ e $R_2$ e che condivide  $R_1$ con la connessione D-B. Per valori
 bassi di $\lambda_{in}$ i buffer overflow sono rari e pertanto aumenti in $\lambda_{in}$ sono pari ad aumenti di $\lambda_{out}$. Si consideri ora il caso
 in cui $\lambda_{in}$ e pertanto $\lambda'_{in}$ sono estremamente grandi e si consideri $R_2$: il traffico A-C che arriva a $R_2$ (forwarded da $R_1$) 
@@ -361,7 +371,7 @@ di percepita congestione.
 \subsubsection{Limitare il tasso del mittente}
 Si ricordi come ogni connessione TCP consiste di un buffer di ricezione, uno di invio e multiple variabili. Il meccanismo di congestion control del TCP del
 mittente opera su un'ulteriore variabile chiamata congestion window $cwnd$ che impone una limitazione al tasso di invio di dati nella rete facendo in modo
-che la quantit\`a di dati senza acknowledgment sia inferiore al minimio tra $cwnd$ e $rwnd$: $LastByteSent-LastByteACKed\le\min(cwnd, rwnd)$. Si assuma ora
+che la quantit\`a di dati senza acknowledgment sia inferiore al minimo tra $cwnd$ e $rwnd$: $LastByteSent-LastByteACKed\le\min(cwnd, rwnd)$. Si assuma ora
 che il buffer di ricezione sia cos\`i grande che $rwnd$ possa essere ignorata: il tasso di invio sar\`a $\frac{cwnd}{RTT}\frac{bytes}{sec}$. Variando il
 valore di $cwnd$ si cambia il tasso di trasmissione. 
 \subsubsection{Percepire congestione}
@@ -388,13 +398,13 @@ fast recovery.
 Quando si arriva nella modalit\`a di congestion avoidance $cwnd$ \`e pi\`u o meno la met\`a del valore in cui era iniziata la congestione. Si deve pertanto
 aumentare il suo valore con pi\`u cautela, pertanto aumenta il suo valore di $1\ MSS$ ogni RTT. Questo \`e fatto aumentando $cwns$ di un valore $\frac{MSS}
 {cwnd}$ ogni volta che un nuovo acknowledgment arriva. Quando accade un timeout si aggiorna il valore di $sstresh$, $cwnd$ viene impostato a $1\ MSS$ e si
-ritorna in slow start mode. Se si ricevono tre ACK consecutivi dimezza il valore di $cwnd$ aggiungendo $3\ MSS$ e entra nello stato di fast recovery.
+ritorna in slow start mode. Se si ricevono tre ACK consecutivi dimezza il valore di $sstresh$  e si pone $cwnd=sstresh+3\ MSS$ e entra nello stato di fast recovery.
 \subsubsection{Fast recovery}
-Il valore di $cwnd$ \`e aumentato di $1\ MSS$ per ogni ACK duplicato del segemento mancante che ha causato TCP di entrare in questo stato. Quando un ACK 
+Il valore di $cwnd$ \`e aumentato di $1\ MSS$ per ogni ACK duplicato del segmento mancante che ha causato TCP di entrare in questo stato. Quando un ACK 
 arriva per il segmento mancante entra nello stato di congestion avoidance dopo aver diminuito il valore di $cwnd$. Se succede un timeout performa le stesse
 azioni degli altri due stati.
 \subsection{Fairness}
-Si considerino $k$ connessioni TCP con cammini diversi ma tutte passanti per attraverso un link di bottleneck con un tasso di trasmissione $R$. Supponendo
+Si considerino $k$ connessioni TCP con cammini diversi ma tutte passanti attraverso un link di bottleneck con un tasso di trasmissione $R$. Supponendo
 che ogni connessione invii una grande quantit\`a di dati un meccanismo di congestion control \`e detto fair se ognuno dei tassi di trasmissione per le 
 connessioni \`e $\frac{R}{k}$. Si consideri il caso in cui $k=2$. Entrambe con lo stesso $MSS$ e $RTT$. Si ignori la fase di slow start e si assuma che 
 entrambe le connessioni siano nello stato di CA, ovvero AIMD (additive increase multiplicative decrease). Si noti che attraverso questo meccanismo entrambe

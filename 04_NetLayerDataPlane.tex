@@ -1,22 +1,22 @@
-\chapter{Il livello di rete: data plane}
+	\chapter{Il livello di rete: data plane}
 \section{Considerazioni sul livello di rete}
-A differenza dei livelli precedenti il livello di rete si trova anche nei router e negli elementi nel network core. Il ruolo primario del data plane nel 
-livello di rete di ogni router\`e quello di permettere il forwarding dei datagrammi dai suoi input links verso gli output links, il ruolo primario del 
+A differenza dei livelli precedenti il livello di rete si trova anche nei router e negli elementi del network core. Il ruolo primario del data plane nel 
+livello di rete di ogni router \`e quello di permettere il forwarding dei datagrammi dai suoi input links verso gli output links, il ruolo primario del 
 control plane \`e di coordinare queste operazioni di forwarding per router in modo che il datagramma arrivi a destinazione. 
 \subsection{Forwarding e routing: il data e control plane}
-Il roulo primario del livello di rete \`e quello di muovere dati dal mittente al destinatario. Affinch\`e questo avvenga vegono individuate due funzioni
-fondamentali:
+Il ruolo primario del livello di rete \`e quello di muovere dati dal mittente al destinatario. Affinch\`e questo avvenga vengono individuate due funzioni
+fondamentali: 
 \begin{itemize}
 \item Forwarding: quando un pacchetto arriva ad un router input link deve essere spostato nell'appropriato output link. Tale pacchetto pu\`o essere anche 
 bloccato o copiato e mandato a multipli destinatari.
 \item Routing: il livello di rete deve saper determinare la route o il cammino preso dal pacchetto mentre si sposta dal mittente al destinatario. 
 L'algoritmo che implementa questa funzionalit\`a \`e detto algoritmo di routing.
 \end{itemize}
-Un elemento chiave in ogni router \`e la sua tabella di forwarding: un router forwards un pacchetto controllando i valori di alcuni campi nell'header e 
+Un elemento chiave in ogni router \`e la sua tabella di forwarding: un router inoltra un pacchetto controllando i valori di alcuni campi nell'header e 
 usando questi valori per indicizzare la tabella. Il valore salvato per quei campi indica il link di output dove deve essere mandato il pacchetto. 
 \subsubsection{Approccio tradizionale al control plane}
-Le tabelle di forwarding sono determinate da un algoritmo di routing che viene eseguito su ogni router e pertanto entrambe le funzioni di forwarding e di
-routing sono contenute in esso. La funzione dell'algoritmo di routing di un router comunica con altre attraverso per computare i valori della tabella di 
+Le tabelle di forwarding sono determinate da un algoritmo di routing eseguito su ogni router. e pertanto entrambe le funzioni di forwarding che di
+routing. L'algoritmo di routing eseguito da un router comunica con altri per computare i valori della tabella di 
 forwarding. Questa comunicazione avviene attraverso un protocollo di routing. 
 \subsubsection{Approccio SDN al control plane}
 In questo approccio le tabelle di routing sono computate e distribuite da un controller separato fisicamente dai router e il router possiede solo la 
@@ -41,20 +41,20 @@ Il livello di rete garantisce un solo servizio: il servizio di best-effort. In q
 \begin{itemize}
 \item Porte di input: una porta di input svolge la funzione di livello fisico di interrompere un link fisico entrante nel router, funzioni di livello di 
 link necessarie per interoperare con il livello di link all'altro capo del link. Inoltre viene anche svolta una funzione di lookup dove viene consultata la 
-tabella di forwarding per determinare a quale porta di output verr\`a forwarded il pacchetto attraverso la switching fabric. I pacchetti di controllo sono
-forwarded da una porta di input al processore del router.
+tabella di forwarding per determinare a quale porta di output verr\`a inoltrato il pacchetto attraverso la switching fabric. I pacchetti di controllo sono
+inoltrato da una porta di input al processore del router.
 \item Switching fabric: questa componente connette le porte di input con le porte di output e costituisce essa stessa una rete. 
-\item Porte di output: questa componenente salva i pacchetti ricevuti dalla switching fabric e li trasmette al link facendo le necessarie operazioni 
+\item Porte di output: questa componente salva i pacchetti ricevuti dalla switching fabric e li trasmette al link facendo le necessarie operazioni 
 di livello di link e fisico. Quando il link \`e bidirezionale la porta corrispondente di input viene accoppiata a quella di output. 
-\item Processore di routing: svolge funzioni di control plane: nei router tradizionali esegue il protocollo di routing , mantiene le tabelle di routing e 
+\item Processore di routing: svolge funzioni di control plane: nei router tradizionali esegue il protocollo di routing, mantiene le tabelle di routing e 
 relative informazioni di link state e computa la tabella di forwarding. Nei router SDN \`e responsabile per la comunicazione con il controller. Svolge oltre
 funzioni di gestione della rete.
 \end{itemize}
 A causa della necessit\`a di operare a velocit\`a elevatissime tutte queste componenti sono implementate in hardware.
 \subsection{Processi alle porte di input e forwarding basato sulla destinazione}
 Le funzioni di line termination e di livello di link processing della porta di input implementano il livello di link e fisico per quel link di input. Il 
-lookup svolto nella porta di input \`e centrale per le funzioni del router: qui viene utilizzata la tabella di forwarding per detrminare la porta di input
-al quale il pacchetto dovr\`a essere inviato attraverso la switching fabric. La tabella di forwarding \`e computata dal processore di routing o ricevuta dal
+lookup svolto nella porta di input \`e centrale per le funzioni del router: qui viene utilizzata la tabella di forwarding per determinare la porta di input
+alla quale il pacchetto dovr\`a essere inviato attraverso la switching fabric. La tabella di forwarding \`e computata dal processore di routing o ricevuta dal
 controller. La tabella di routing \`e copiata dal processore alla porta di input attraverso un bus diverso in modo da evitare un bottleneck causato dalla
 chiamata di un processo centrale. Si consideri ora il caso in cui la porta di output \`e determinata unicamente dall'indirizzo di destinazione: a causa
 del gran numero di indirizzi possibili non \`e possibile utilizzare un algoritmo brute-force. Per migliorare le prestazioni si utilizza una regola di 
@@ -73,7 +73,7 @@ dell'arrivo di un pacchetto che veniva copiato dalla porta nella memoria del pro
 nel buffer della porta di output. 
 \item Switching attraverso un bus: in questo approccio la porta di input trasferisce il pacchetto direttamente verso la porta di output lungo un bus 
 condiviso. Tutte le porte di output ricevono il pacchetto ma solo quella appropriata lo mantiene. Solo un pacchetto alla volta pu\`o trovarsi nel bus.
-\item Switching attravreso una rete di interconnessione: si utilizza un crossbar switch che consiste di $2N$ bus che connettono $N$ porte di input ad 
+\item Switching attraverso una rete di interconnessione: si utilizza un crossbar switch che consiste di $2N$ bus che connettono $N$ porte di input ad 
 altrettante porte di output. Ogni bus verticale si interseca con uno orizzontale ad un crosspoint che pu\`o essere aperto o chiuso. Un pacchetto da A a Y
 trover\`a chiuso il crosspoint nell'intersezione dei bus di A e Y. Questo switch si dice non bloccante in quanto un pacchetto pu\`o attraversarlo a patto 
 che non abbia lo stesso output di un altro.
@@ -83,7 +83,7 @@ Le porte di output prendono i pacchetti nei corrispettivi buffer, li selezionano
 e inviano il pacchetto al link.
 \subsection{Queuing}
 Le code di pacchetti possono accadere nei buffer delle porte di input o in quelli delle porte di output. La dimensione di queste code dipende dalla 
-quantit\`a di traffico, dalla velocit\`a della switching fabric e dalla velocit\`a della linea. \`E quando queste code vengono riempite fino al massimo che
+quantit\`a di traffico, dalla velocit\`a della switching fabric e dalla velocit\`a della linea. Quando queste code vengono riempite fino al massimo 
 vengono persi dei pacchetti. Si supponga che le linee di input e output abbiano tutte la stessa velocit\`a $R_{line}$ e che ce ne sono $N$ per tipo. Si 
 assuma che tutti i pacchetti abbiano una lunghezza fissa e arrivino alle porte in maniera sincrona. Si definisca $R_{switch}$ il tasso di trasmissione della
 switching fabric. Se questo \`e uguale a $NR_{line}$ nessuna coda verr\`a creata alle porte di input. 
@@ -98,8 +98,9 @@ crescere illimitatamente e pertanto causare perdita di dati.
 Si supponga $R_{switch}$ uguale  $NR_{line}$ e che gli $N$ pacchetti che arrivano da ognuna delle porte di input debbano essere inviati nella stessa porta 
 di output. In questo caso durante la trasmissione di un pacchetto arrivano alla porta $N$ nuovi pacchetti e questi dovranno essere incodati. Eventualmente
 questa coda si potrebbe riempire causando perdita di pacchetti. Quando non c'\`e pi\`u abbastanza memoria per salvare un pacchetto si deve scegliere se 
-droppare il pacchetto appena arrivato (drop-tail) o uno in coda. Un'altra azione potrebbe essere quella di marcare un pacchetto prima che questo si 
-verifichi in modo da inforamare dell'esistenza di congestione. Un numero di regole di packet dropping e marking \`e conosciuto come active queue management
+droppare il pacchetto appena arrivato (drop-tail), uno in coda scelto randomicamente o il primo elemento nella coda (drop-head) in
+quanto permette a TCP di entrare prima nella fase di congestion avoidance. Un'altra azione potrebbe essere quella di marcare un pacchetto prima che questo si 
+verifichi in modo da informare dell'esistenza di congestione. Un numero di regole di packet dropping e marking \`e conosciuto come active queue management
 (AQM). Uno dei pi\`u diffusi \`e il random early detection (RED). Una conseguenza di questo incodamento \`e che un packet scheduler alla porta di output 
 deve decidere quale pacchetto trasmettere. Le dimensioni della coda variano e vengono scelte in base  a $RTT\cdot C\text{(link capacity)}$ o $\frac{RTI\cdot 
 C}{N}$, dove $N$ il numero di TCP flows.
@@ -108,14 +109,14 @@ C}{N}$, dove $N$ il numero di TCP flows.
 Un pacchetto viene incodato se il link \`e occupato e quando il buffer \`e pieno entrano in gioco le discard policies. La politica FIFO invia pacchetti 
 nello stesso ordine con cui arrivano alla porta di output. 
 \subsubsection{Priority queuing}
-In questa politica i pacchetti che arrivano al link sono separati in classi di priorit\`a . Ogni classe di priorit\`a ha tipicamente la sua coda. Quando 
+In questa politica i pacchetti che arrivano al link sono separati in classi di priorit\`a. Ogni classe di priorit\`a ha tipicamente la sua coda. Quando 
 deve scegliere che pacchetto trasmettere viene scelto dalla coda non vuota con la priorit\`a pi\`u alta. All'interno di ogni coda vige una politica FIFO.
 \subsubsection{Round robin e weighted fair queuing (WFQ)}
 Come nel priority queuing i pacchetti sono divisi in classi e un round robin scheduler alterna i servizi tra le classi. Una disciplina di work-conserving 
 queuing non permetter\`a al link di rimanere idle fino a che ci sono pacchetti da trasmettere controllando immediatamente la classe successiva se quella
 che considera \`e vuota. Una forma generalizzata di round robin \`e il weighted fair queuing, una disciplina work-conserving che si muove tra le classi
 ciclicamente secondo un peso $w_i$ ed \`e garantita una frazione di servizio pari a $\frac{w_i}{\sum w_j}$ dove il denominatore \`e la somma dei pesi delle
-classi con pacchetti. Ogni classe ottiene un throughput di almento $R\frac{w_i}{\sum w_j}$.
+classi con pacchetti. Ogni classe ottiene un throughput di almeno $R\frac{w_i}{\sum w_j}$.
 \section{Il protocollo di internet: IPv4, indirizzamento, IPv6}
 \subsection{Formato del datagramma IPv4}
 \begin{figure}[h]
@@ -142,7 +143,7 @@ tra di loro in complemento a 1. A causa del TLL viene ricomputato in ogni router
 \end{itemize}
 \subsection{IPv4 frammentazione del datagramma}
 La massima quantit\`a di dati che un link pu\`o trasportare \`e detta maximum transmission unit (MTU) e determina un limite rigido per la dimensione massima
-dei datagrammi. Essendo che da mittente e destinatario possono sussistere link con MTU diverse nascono dei problemi. Quando si deve inviare un datagramma
+dei datagrammi. Essendo che da mittente e destinatario possono sussistere link con MTU diversi nascono dei problemi. Quando si deve inviare un datagramma
 troppo grosso in un link con MTU troppo piccolo questo viene frammentato in due frame di livello di link pi\`u piccoli. Questi frammenti devono essere 
 ricomposti prima di essere inviati al livello di trasporto. La deframmentazione avviene negli end-systems. Pertanto quando un host destinatario riceve dei
 datagrammi deve determinare se questi sono frammenti di un datagramma originale. Deve anche determinare quando ha ricevuto l'ultimo frammento e come i 
@@ -162,46 +163,73 @@ si stacchi ogni interfaccia dal suo router o host creando delle reti isolate che
 detta classless interdomain router (CIDR) che generalizza la cognizione di indirizzamento per le subnets. L'indirizzo IP a 32 bit \`e diviso in due 
 parti e viene indicato con $a.b.c.d/x$ dove $x$ indica il numero di bit per la prima parte. Gli $x$ bit pi\`u significativi formano il prefisso o prefisso
 di rete dell'indirizzo. Ad un'organizzazione vengono tipicamente assegnati IP contigui con lo stesso prefisso e sono gli unici bit considerati dai router
-all'esterno dell'organizzazione. I rimanenti $32-x$ bits vengono utilizzati per fare forwarding sui pacchetti all'interno dell'organizzazione. Viene 
+all'esterno dell'organizzazione. I rimanenti $32-x$ bits vengono utilizzati per fare forwarding sui pacchetti all'interno dell'organizzazione, questa parte viene chiamata campo host dell'indirizzo. Viene 
 riservato l'indirizzo IP di broadcast 255.255.255.255 in cui il pacchetto viene duplicato in tutti gli host nella stessa sottorete. 
 \subsubsection{Ottenere un blocco di indirizzi}
 In ordine per ottenere un blocco di indirizzi IP per un'organizzazione si deve contattare un ISP che mette a disposizione indirizzi da un numero di 
 indirizzi a sua disposizione ancora pi\`u grande. Lo fa aumentando la dimensione della subnet mask. L'interezza degli indirizzi IP \`e gestita dalla 
-Internet corporationfor assigned names and numbers (ICANN) che si occupa di allocare gli indirizzi IP e di gestire i server DNS di root, assegna nomi di 
-dominio e risolve dispute riguardo essi. Alloca indirizzi verso regristri locali che formano l'Address support organization dell'ICANN (ASO-ICANN) che 
+Internet corporation for assigned names and numbers (ICANN) che si occupa di allocare gli indirizzi IP e di gestire i server DNS di root, assegna nomi di 
+dominio e risolve dispute riguardo essi. Alloca indirizzi verso registri locali che formano l'Address support organization dell'ICANN (ASO-ICANN) che 
 gestiscono l'allocazione e la gestione di indirizzi all'interno della loro regione. 
 \subsubsection{Ottenere un indirizzo IP per l'host: il Dynamic host configuration protocol}
 Una volta che un'organizzazione ha ottenuto un blocco di indirizzi li pu\`o assegnare ad ogni interfaccia al suo interno. Gli indirizzi IP dei router sono
-tipicamente configurati manualmente, mentre quelli degli host sono configurati attraverso il dinamic host configuration protocolo (DHCP) che permette ad un
+tipicamente configurati manualmente, mentre quelli degli host sono configurati attraverso il dynamic host configuration protocollo (DHCP) che permette ad un
 host di ricevere un indirizzo IP automaticamente. L'host pu\`o ricevere lo stesso indirizzo IP ogni volta che si connette alla rete o ottenerne uno
 temporaneo alla connessione. DHCP mette inoltre a disposizione all'host informazioni sul primo router (default gateway), la subnet mask e l'indirizzo del
 server DNS locale. Questo protocollo \`e detto plug-and-play e zeroconf. DHCP \`e un protocollo client-server. Un client \`e tipicamente un nuovo host che
 vuole ottenere informazioni per la configurazione di rete e un indirizzo IP per s\`e. Nel caso pi\`u semplice ogni subnet possiede un server DHCP. Se non 
 \`e presente un DHCP relay agent che conosce la posizione del server DHCP per la rete \`e necessario. Per un nuovo host il protocollo DHCP \`e composto da
-quattro fasi: 
+quattro fasi (DORA): 
 \begin{itemize}
-\item DHCP server discovery: il primo compito dell'host \`e quello di trovare il server DHCP ed \`e fatto attravreso un DHCP discover message che un client
+\item DHCP server discovery: il primo compito dell'host \`e quello di trovare il server DHCP ed \`e fatto attraverso un DHCP discover message che un client
 invia attraverso un pacchetto UDP alla porta 67 con la broadcast definition dell'indirizzo IP e un questo host con indirizzo IP 0.0.0.0 l'host lo incapsula
 in in frame di livello di link e fa un broadcast a tutti i nodi presenti nella sottorete.
-\item DHCP server offer: il server che riceve il DHCP discovery message risponde al client con un DHCP offer message inviato attraverso il broadcast IP. 
-Questo messaggio contiene il transacion ID del discover message, l'indirizzo IP proposto e l'IP lease time solitamente settato a ore o giorni. 
+\item DHCP server offer: il server DHCP che riceve il DHCP discovery message risponde al client con un DHCP offer message inviato attraverso l'unicast IP. 
+Questo messaggio contiene il transaction ID del discover message, l'indirizzo IP proposto e l'IP lease time solitamente settato a ore o giorni. 
 \item DHCP request: il client sceglie tra i server offer arrivatigli e risponde con un DHCP request message che fa echoing sui parametri di configurazione.
 \item DHCP ACK: il server risponde al request message attraverso un DHCP ACK message che conferma i parametri richiesti. 
 \end{itemize}
 Una volta completati questi messaggi il client pu\`o utilizzare l'indirizzo IP consegnatogli. Se vuole continuare a utilizzarlo dopo la fine del lease time
 DHCP mette a disposizione dei meccanismi per rinnovare l'indirizzo. Non si possono mantenere connessioni TCP se si sposta tra le sottoreti. 
+\subsubsection{Routing e forwarding per indirizzamento dinamico}
+Quando viene utilizzato l'indirizzamento dinamico viene utilizzata la maschera di rete dal router per capire dove instradare il pacchetto. Dato l'indirizzo di destinazione IP D, la maschera M e il prefisso di rete
+N il calcolo per l'instradamento \`e $N== D \& M$. Nella tabella di forwarding ci saranno $N$ destinazioni e $N$ interfacce da prendere nel caso la direzione sia quella. Quando viene ricevuto il pacchetto con
+destinazione D viene effettuato l'instradamento verso la destinazione che soddisfa $N \& M_i==N_i$. Se nella tabella non vie \`e nessun match si utilizza l'ultima riga della tabella che contiene l'indirizzo 
+0.0.0.0/0 che instrada verso il gateway router. Nella tabella \`e presente un campo che indica al router l'indirizzo del next-hop router nel cammino. 
 \subsection{Network address translation (NAT)}
-Il network addres translation viene utilizzato per facilitare la gestione di piccoli uffici o istallazioni casalinghe (SOHO) oltre a permettere di 
+Il network address translation viene utilizzato per facilitare la gestione di piccoli uffici o installazioni casalinghe (SOHO) oltre a permettere di 
 connettere pi\`u dispositivi all'internet. Un NAT-enabled router ha un'interfaccia parte della rete di casa. Tutte le interfacce in questa rete hanno la 
 stessa subnet mask e lo spazio di indirizzo $/8$ \`e uno dei tre riservato per una rete privata o una realt\`a con reti private. Il NAT enable router non
 sembra un router alla rete esterna ma viene considerato come come un singolo dispositivo con un singolo indirizzo IP, ovvero nasconde i dettagli della rete
 casalinga al mondo esterno. Tutti questi indirizzi vengono ottenuti attraverso DHCP (dal server dell'ISP per il router e da quello del router per i 
 dispositivi interni). Essendo che tutti i datagrammi che arrivano al router NAT hanno lo stesso indirizzo, per ottenere il destinatario corretto viene 
-utilizzata una tabella di traduzione NAT e vengono inclusi i numeri di porta oltre agli indirizzi IP.
+utilizzata una tabella di traduzione NAT e vengono inclusi i numeri di porta oltre agli indirizzi IP. Il NAT in sostanza si occupa di mappare una tupla di $5$ elementi con un'altra:
+\begin{itemize}
+\item Prima tupla: $<$indirizzo IP privato del mittente, indirizzo IP pubblico destinazione, porta sorgente, porta destinazione, protocollo$>$.
+\item Seconda tupla: $<$indirizzo IP pubblico del mittente, indirizzo IP pubblico destinazione, altra porta sorgente, porta destinazione, protocollo$>$.
+\end{itemize}
+Gli indirizzi IP privati devono rimanere univoci all'interno della rete privata  e sono:
+\begin{itemize}
+\item Da 10.0.0.0 a 10.255.255.255 (10.0.0.0/8).
+\item Da 172.16.0.0 a 172.31.255.255 (172.16.0.0/12).
+\item Da 192.168.0.0 a 192.168.255.255 (192.168.0.0/16).
+\end{itemize}
+\subsection{Indirizzi IP speciali}
+Gli indirizzi IP speciali svolgono uno specifico compito e pertanto non sono associati a nessun host.
+\begin{itemize}
+\item Network address: indirizzo con campo host tutto a 0, viene utilizzato per indicare la rete.
+\item Directed broadcast address: indirizzo con campo host tutto a 1, viene utilizzato per inviare un pacchetto a tutti gli host presenti nella rete.
+\item Limited broadcast address: indirizzo con campo rete e host completamente a 1 viene utilizzato per inviare un pacchetto a tutti gli host presenti nella rete. Non viene processato dal router e rimane nella 
+sottorete da cui \`e partito.
+\item This computer address: indirizzo con campo rete e host completamente a 0, utilizzato per instaurare una connessione quando non si possiede un indirizzo IP nella rete.
+\item Loopback address: indirizzo con prefisso 127/8, utilizzato per testare applicazioni di rete su un host singolo.
+\item Multicast address: indirizzo che va da 224.0.0.0 a 239.255.255.255 utilizzato per inviare pacchetti a un gruppo di host, normalmente viene bloccato all'interno di una rete.
+\item Link-local address: sottorete 169.254.0.0/16 riservata per permettere le comunicazioni quando un host non trova l'indirizzo IP. 
+\end{itemize}
 \subsection{IPv6}
 I maggiori cambi nel formato del datagramma sono:
 \begin{itemize}
-\item Expanded addressing capabilities: la dimensione dell'inirizzo IP \`e aumentata da 32 a 128 bit. 
+\item Expanded addressing capabilities: la dimensione dell'indirizzo IP \`e aumentata da 32 a 128 bit. 
 \item Un header di 40 byte fissi eliminando le opzioni in modo da permettere un router processing pi\`u veloce.
 \item Flow labeling: in modo da marcare pacchetti per cui il mittente richiede una gestione speciale. 
 \end{itemize}
@@ -222,9 +250,10 @@ I seguenti campi sono definiti in IPv6:
 \end{itemize}
 IPv6 a differenza di IPv4 non mette a disposizione un servizio di frammentazione: se un pacchetto \`e troppo grande lo droppa e invia al mittente un 
 messaggio di ICMP che notifica che il pacchetto era troppo grande. Header checksum in quanto altri livelli lo compiono gi\`a e considerato ridondante. 
-\subsubsection{Transizionare da IPv4 a IPv6}
+\subsubsection{Transizione da IPv4 a IPv6}
 Per effettuare la transizione da IPv4 a IPv6 viene utilizzato l'approccio del tunneling: quando un datagramma IPv6 trova un router ad IPv4 viene 
-impacchettato in un nuovo datagramma IPv4 il nodo alla fine del tunneil IPv4 capisce che contiene un datagramma IPv6, lo estrae e lo forward. 
+impacchettato in un nuovo datagramma IPv4. Questo datagramma viene inviato come un normale pacchetto di tipo multicast specificando nel  campo di protocol che ha un payload di tipo IPv6. Il nodo alla 
+fine del tunnel IPv4 capisce che contiene un datagramma IPv6, lo estrae e lo inoltra. 
 \section{Forwarding generalizzato e SDN}
 Nel forwarding generalizzato una tabella match-plus-action generalizza la tabella di forwarding incontrata precedentemente. Questi dispositivi vengono 
 riferiti come packet switch. La tabella in ogni packet switch \`e computata da un controller esterno. Ogni input in una tabella di match-plus-action 
@@ -240,7 +269,7 @@ essere droppato o inviato al controller per ulteriore processing.
 \includegraphics[width=\textwidth]{FlowTableEntry.png}
 \caption{formato del datagramma IPv6}
 \end{figure}
-Si noti come l'astrazione fatta sul pacchetto perfette di accedere a dati provenienti da diversi livelli dello stack di rete. Le entries possono avere 
+Si noti come l'astrazione fatta sul pacchetto permette di accedere a dati provenienti da diversi livelli dello stack di rete. Le entries possono avere 
 wildcards negli indirizzi IP e hanno una priorit\`a associata. 
 \subsection{Action}
 Dopo che avviene un match esiste una lista di zero o pi\`u azioni di processing da effettuare per quanto riguarda il pacchetto. Alcune delle pi\`u 

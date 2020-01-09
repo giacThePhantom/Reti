@@ -27,7 +27,7 @@ queste etichette temporaneamente in base al loro ruolo. Si possono pertanto defi
 etichettato come il client e il processo che aspetta di essere contattato per iniziare la sessione \`e il server. 
 \subsubsection{L'interfaccia tra il processo e la rete}
 Come visto sopra la maggior parte delle applicazioni consistono in paia di processi comunicativi con entrambi i processi che si inviano messaggi. Ogni messaggio inviato all'altro deve attraversare la rete 
-sottostante. Un processo invia messaggi in , riceve dalla rete attraverso un'interfaccia software chiamata socket. Un socket \`e quella parte software che permette al messaggio di uscire dall'end system in modo
+sottostante. Un processo invia e riceve messaggi dalla rete attraverso un'interfaccia software chiamata socket. Un socket \`e quella parte software che permette al messaggio di uscire dall'end system in modo
 da entrare nella rete. Un socket \`e pertanto l'interfaccia tra il layer applicativo e quello di trasporto all'interno di un host. Ci si riferisce a esso anche come l'Application Programming Interface (API) tra 
 l'applicazione e la rete in quanto il socket \`e l'interfaccia di programmazione in cui le reti sono costruite. Il solo controllo disponibile da parte dello sviluppatore dell'applicazione sul layer di trasporto \`e la
 scelta del protocollo di trasporto e l'abilit\`a di fissare alcuni parametri come il massimo buffer e dimensione dei segmenti. 
@@ -40,7 +40,7 @@ di destinazione svolge questo scopo. Applicazioni di vasto utilizzo hanno specif
 L'applicazione che invia messaggi spinge messaggi attraverso il socket. Dall'altra parte del socket il protocollo del layer di trasporto ha la responsibilit\`a di portare il messaggio al socket del processo ricevente.
 Molte reti mettono a disposizione numerosi protocolli di trasporto e durante lo sviluppo si necessita di sceglierne uno. La scelta dipende dalle caratteristiche necessaria alla singola applicazione.
 \subsubsection{Data transfer affidabile}
-Essendo che pacchetti possono andare persi nella rete in caso di corruzione dei bit o overflow dei buffer e che per molte applicazioni la perdita dei dati pu\`o avere conseguenze devastanti per supportare queste
+Essendo che i pacchetti possono andare persi nella rete in caso di corruzione dei bit o overflow dei buffer e che per molte applicazioni la perdita dei dati pu\`o avere conseguenze devastanti per supportare queste
 applicazioni si deve garantire che i dati inviati siano ricevuti correttamente e completamente. Se un protocollo garantisce questo \`e detto che provvede ad un reliable data transfer. La perdita per alcune 
 applicazioni pu\`o essere tollerata (loss-tolerant applications) come quelle di invio di multimedia. 
 \subsubsection{Throughput}
@@ -116,7 +116,7 @@ $N$ oggetti.
 Quando il browser riceve la pagina la mostra all'utente. Due browser diversi potrebbero interpretarla in modo diverso in quanto le specifiche HTTP definiscono unicamente il protocollo di comunicazione. 
 L'apertura delle diverse connessioni TCP pu\`o essere fatta in maniera parallela. Quando si vuole richiedere una Web page si apre una connessione TCP, che la conferma con un altro messaggio e il client 
 riconferma. Le prime due parti richiedono un RTT. Dopo aver completato l'handshaking il client invia un messaggio di richiesta HTTP combinato con la terza parte dell'handshake e una volta che arriva al server
-questo invia l'HTML file nella connessione TCP. Questa richiesta risposta HTTP richiede un altro RTT. Pertanto il tempo di risposta totale \`e due RTT pi\`u il tempo di trasmissione al server del file HTML.
+questo invia l'HTML file nella connessione TCP. Questa richiesta risposta HTTP richiede un altro RTT. Pertanto il tempo di risposta totale \`e due RTT pi\`u il tempo di trasmissione al client del file HTML.
 \subsubsection{HTTP con connessione persistente}
 Con questo tipo di connessione il server lasca aperta la connessione TCP dopo aver inviato la risposta. Richieste successive dallo stesso client possono essere inviata dalla stessa connessione. Queste richieste
 possono essere fatte back-to-back senza aspettare per le rispose di richieste in fase di elaborazione (pipelining). Tipicamente il server HTTP chiude una connessione dopo un intervallo di tempo. E quando riceve
@@ -187,8 +187,9 @@ TCP se deve inviare altri messaggi altrimenti chiude la connessione. In un messa
 quelle inviate dal server. Durante la comunicazione il client invia cinque comandi: \emph{HELO} seguito dal proprio mail server, \emph{MAIL FROM:} in cui \`e indicato l'indirizzo e-mail del mittente, 
 \emph{RCPT TO:} dove \`e indicato l'indirizzo del ricevente \emph{DATA} contenenti il corpo dell'e-mail terminato da una singola riga contenente un punto e \emph{QUIT} per terminare la connessione. SMTP
 utilizza connessioni persistenti. La prima riga contiene l'avvenuta connessione con il server del ricevente con il codice \emph{220}.
+Per messaggi multimediali viene utilizzata l'estensione di SMTP MIME. 
 \subsection{Comparazione con HTTP}
-HTTP \`e primariamente un protocollo di pull, in particolare la connessione TCP \`e inizializzata dalla macchina che vuole ricevere il file. SMTP \`e primariamente un push protocol on quanto la connessione TCP 
+HTTP \`e primariamente un protocollo di pull, in particolare la connessione TCP \`e inizializzata dalla macchina che vuole ricevere il file. SMTP \`e primariamente un push protocol in quanto la connessione TCP 
 \`e iniziata dalla macchina che vuole inviare i file. SMTP inoltre richiede che ogni parte del messaggio, compreso il corpo sia nello standard ASCII a 7 bit. Inoltre HTTP incapsula ogni oggetto in un diverso
 messaggio HTTP, mentre in SMTP posiziona ogni oggetto del messaggio nel messaggio stesso.
 \subsection{Formato dei messaggi mail}
@@ -205,7 +206,7 @@ con l'autorizzazione, transazione e aggiornamento. Durante la prima fase l'user 
 messaggi e pu\`o marcarli per eliminazione e ottenere le statistiche della mail. La terza fase accade dopo il comando \emph{quit} che finisce la sessione POP3 e durante questa fase il mail server elimina i 
 messaggi marcati per eliminazione. In una transazione POP3 l'user agent invia comandi e il server risponde con una risposta. Ce ne sono due possibili: \emph{+OK} seguita da dati server-to-client per indicare
 il successo del comando e \emph{-ERR} usato dal server per indicare un errore con il comando. La fase di autorizzazione ha due comandi principali: \emph{user $<$username$>$} e \emph{
-pass $<$password$>$}.  Durante la fase idi transazione un user agente POP3 pu\`o essere configurato dall'utente per scaricare ed eliminare o scaricare e mantenere. La sequenza di comandi inviati dipende
+pass $<$password$>$}.  Durante la fase di transazione un user agente POP3 pu\`o essere configurato dall'utente per scaricare ed eliminare o scaricare e mantenere. La sequenza di comandi inviati dipende
 da quale di questi due modelli viene utilizzato. Nel primo l'user agent invia il comando \emph{list, retr, dele}. POP3 \`e stateless.
 \subsubsection{IMAP}
 Con accesso POP3 il ricevente scarica i suoi messaggi sulla macchina locale, pu\`o creare cartelle mail e spostare mail scaricate in cartelle, cercare per messaggi. Questo paradigma pone un problema per 
@@ -217,9 +218,8 @@ ottenere componenti dei messaggi. Per facilitare connessioni con bandwidth basso
 \subsubsection{Web-Based E-Mail}
 Con questo servizio l'user agent \`e un ordinario Web browser che comunica con la mailbox attraverso HTTP. 
 \section{DNS - Internet's Directory Service}
-Gli host dell'internet possono essere identificati attraverso un hostname che nonostante siano facili da ricordare mettono a disposizione poche informazioni riguardanti il luogo in cui si trovano. Per queste
-ragioni sono identificati anche attraverso un indirizzo IP. Tali indirizzi consistono di quattro byte separati da punti.  Sono gerarchici in quanto scorrendo l'indirizzo da sinistra verso destra si ottengono 
-informazioni sempre pi\`u specifiche sulla sua posizione. 
+Gli host dell'internet sono identificati da un hostname human readable e un indirizzo IP composto da quattro byte rappresentati
+attraverso una dotted decimal notation che fornisce informazioni sulla posizione relativa dell'host nell'internet.
 \subsection{Servizio di un DNS}
 Per tradurre un hostname nel corrispondente indirizzo IP si crea un servizio di directory. Il ruolo principale del domain name system dell'internet \`e questo. Il DNS \`e un database distribuito implementato in
 una gerarchia di server DNS e un protocollo di livello applicativo che  permette agli host di fare query su questo database. I server DNS sono macchine UNIX che eseguono il software Berkeley Internet Name 
@@ -231,16 +231,16 @@ Domain (BIND). Il protocollo DNS esegue UDP e usa la porta 53. \`E comunemente u
 \item Il client DNS riceve una risposta che contiene l'indirizzo IP corrispondente.
 \item Una volta che il browser riceve l'indirizzo IP pu\`o iniziare una connessione TCP.
 \end{enumerate}
-Il DNS aggiunge un ritardo ulteriore alle applicazioni che lo utilizzano. Spesso gli indirizzi IP sono cachati in un DNS server vicino in modo da ridurre il traffico verso i server DNS. Provvedono inoltre altri servizi:
+Il DNS aggiunge un ritardo ulteriore alle applicazioni che lo utilizzano. Spesso gli indirizzi IP sono cachati in un DNS server locale in modo da ridurre il traffico verso i server DNS. Provvedono inoltre altri servizi:
 \begin{itemize}
 \item Host aliasing: un host con un nome complicato pu\`o avere uno o pi\`u alias. Il primo \`e detto hostname canonico.
 \item Mail server aliasing. 
 \item Load distribution: il DNS \`e utilizzato per distribuire il carico tra i server replicati. Quando siti sono replicati su diversi indirizzi IP il DNS invia tutta la lista ma ruota l'ordine degli indirizzi con ogni risposta. 
 \`E utilizzato anche per i mail server.
 \end{itemize}
-Il DNS \`e specificato negli RFC 1034 e RFC 1035 e aggiornato in moltri altri.
+Il DNS \`e specificato negli RFC 1034 e RFC 1035 e aggiornato in molti altri.
 \subsection{Funzionamento del DNS}
-Un design semplice per il DNS avrebbe un server DNS che contiene tutte le mappature da hostname a IP. \`E impratico in quanto:
+Un design semplice per il DNS avrebbe un server DNS che contiene tutte le mappature da hostname a IP. \`E impraticabile in quanto:
 \begin{itemize}
 \item Possiede un singolo punto di fallimento.
 \item Dovrebbe sostenere un volume di traffico immenso.
@@ -258,14 +258,14 @@ In una catena di query quando un DNS server riceve una risposta pu\`o cachare la
 periodo, tipicamente due giorni. 
 \subsection{DNS records e messaggi}
 I server DNS che implementano il database distribuito DNS salvano resource records (RRs) che includono quelli che forniscono la mappatura hostname-to-IP. Ogni messaggio di risposta DNS contiene
-uno o pi\`u RRs. Un resource record \`e una tupla che contiene i campi \emph{(Name, Value, Type, TTL)}. \emph{TTL} \`e il tempo che rimane al RR e determina quando dovrebbe essere rimosso dalla cachke. 
+uno o pi\`u RRs. Un resource record \`e una tupla che contiene i campi \emph{(Name, Value, Type, TTL)}. \emph{TTL} \`e il tempo che rimane al RR e determina quando dovrebbe essere rimosso dalla cache. 
 Il significato di \emph{Name} e \emph{Value} dipende da \emph{Type}:
 \begin{itemize}
 \item Se \emph{Type=A} allora \emph{Name} \`e un hostname e \emph{Value} \`e l'indirizzo IP. 
 \item Se \emph{Type=NS} allora \emph{Name} \`e un dominio e \emph{Value} \`e l'hostname di un server authoritative DNS che sa come ottenere l'indirizzo IP.  \`E utilizzato per instradare query DNS lungo
-la quey chain.
+la query chain.
 \item Se \emph{Type=CNAME} allora \emph{Value} \`e l'hostname canonico per l'hostname halias \emph{Name}.
-\item Se \emph{Type=} allora \emph{Value} \`e il nome del mail server canonico che ha un alias hostname \emph{Name}. 
+\item Se \emph{Type=MX} allora \emph{Value} \`e il nome del mail server canonico che ha un alias hostname \emph{Name}. 
 \end{itemize}
 Se un server DNS \`e authoritative per un particolare hostname contiene un record \emph{Type=A} per quell'hostname. Se non lo \`e contiene un record \emph{Type=NS} e uno \emph{Type=A} per il server 
 DNS nel campo \emph{Value} del primo.
@@ -274,15 +274,15 @@ Esistono due tipi di messaggio DNS: query e risposta e hanno lo stesso formato.
 \begin{itemize}
 \item I primi 12 byte nella sezione header contengono vari campi:
 \begin{itemize}
-\item Il primo campo \`e un numero a 16 bit che identifica la query. \`E copiato nel messaggio di risposta in modo di verificare la corrispondenza tra query inviate e risposte ricevut.
+\item Il primo campo \`e un numero a 16 bit che identifica la query. \`E copiato nel messaggio di risposta in modo di verificare la corrispondenza tra query inviate e risposte ricevute.
 \item Flags che indicano se il messaggio \`e una query o una risposta, una flag \`e settata in risposta se il DNS \`e authoritative, un altra se si desidera compiere della ricorsione, la cui disponibilit\`a \`e controllata
 da un'altra. 
 \item Quattro campi number-of che indicano il numero di occorrenze dei quattro tipi di sezioni dati che seguono l'header.
 \end{itemize}
-\item La question section contiene informazioni riguardanti la query che si sta svolgendo: include un campo di nome che contiene il nome che si sta richiedendo, un capo tipo che indica il tipo di domanda 
+\item La question section contiene informazioni riguardanti la query che si sta svolgendo: include un campo di nome che contiene il nome che si sta richiedendo, un campo tipo che indica il tipo di domanda 
 riguardo il nome.
 \item In una risposta da un server DNS l'answer section contiene gli RRs per il nome che era stato originariamente richiesto che possono essere multipli.
-\item L'authority section contiene records di altr servers authoritative.
+\item L'authority section contiene records di altri servers authoritative.
 \item L'additional section contiene altri record utili.
 \end{itemize}
 \subsubsection{Inserire records nel database DNS}
@@ -290,8 +290,8 @@ Esiste un registrar, un'entit\`a commerciale che verifica l'unicit\`a del nome d
 siano registrati nei server TLD. E si deve fare attenzione ad inserire nel proprio server record di tipo A per il web server e di tipo MX per il mail 
 server.
 \section{Distribuzione di file Peer-to-Peer}
-In un'architettura P2P esiste una minima o nessuna dipendenza verso un sistema centrale sempre attivo: itermittenetemente paia di hosts connessi detti peers 
-comunicano direttamente tra di loro. Questi peers sono macchine controllate possedute dagli utenti. Si consideri una naturale applicazione del P2P: la
+In un'architettura P2P esiste una minima o nessuna dipendenza verso un sistema centrale sempre attivo: intermittenetemente paia di hosts connessi detti peers 
+comunicano direttamente tra di loro. Questi peers sono macchine controllate/possedute dagli utenti. Si consideri una naturale applicazione del P2P: la
 distribuzione di file attraverso un protocollo detto bitTorrent in cui ogni peer pu\`o inviare una parte del file richiesto in modo da diminuire il carico
 sul sistema centrale.
 \subsection{Scalabilit\`a di architetture P2P}
@@ -303,7 +303,7 @@ impiegato per distribuire il file a tutti i peers.
 Si determini prima il tempo di distribuzione per le architetture client-server denotato con $D_{cs}$. Si 
 osserva come il server deve distribuire completamente una copia ad ognuno degli $N$ peers e deve pertanto trasmettere $NF$ bits. Pertanto impiegher\`a 
 $\frac{NF}{u_s}$ tempo. Sia ora $d_{\min}$ il tasso di download minimo tra i peers. Tale peer non potr\`a ricevere il file prima di $\frac{F}{d_{\min}}$. 
-Attraverso queste osservazioni si nota come $D_{cs}=\max{\frac{NF}{u_s}, \frac{F}{d_{\min}}}$. Si nota pertanto che il tempo di distribuzione cresce 
+Attraverso queste osservazioni si nota come $D_{cs}=\max(\frac{NF}{u_s}, \frac{F}{d_{\min}})$. Si nota pertanto che il tempo di distribuzione cresce 
 linearmente con il numero di peers $N$. 
 \paragraph{Tempo di distribuzione P2P}
 Calcolando il tempo di distribuzione per le architetture P2P si nota come un peer pu\`o assistere il server nell'invio dei dati utilizzando la propria 
@@ -312,13 +312,13 @@ il file nella comunit\`a dei peers deve inviarlo almeno una volta attraverso il 
 con il tasso di download pi\`u basso non lo potr\`a ottenere prima di $\frac{F}{d_{\min}}$, rendendolo di fatto il tempo minimo. Si osservi come la 
 capacit\`a di upload del sistema sia pari alla capacit\`a di upload del server e di tutti i peers, pertanto $u_{total}=u_s+u_0+\cdots u_N$. Tale sistema 
 deve distribuire il file $F$ a tutti $N$ i peers, pertanto il tempo di distribuzione sar\`a $\frac{NF}{u_s+u_0+\cdots u_N}$. Unendo queste considerazioni si 
-noti come il tempo di distribuizione diventa $D_{P2P}=\max\{\frac{F}{u_s}, \frac{F}{d_{\min}}, \frac{NF}{u_s+\sum\limits_{i=1}^Nu_i}\}$. Questo tempo non 
+noti come il tempo di distribuzione diventa $D_{P2P}=\max\{\frac{F}{u_s}, \frac{F}{d_{\min}}, \frac{NF}{u_s+\sum\limits_{i=1}^Nu_i}\}$. Questo tempo non 
 diventa pi\`u lineare con il numero di peers e pertanto provvede una scalabilit\`a implicita.
 \subsection{BitTorrent}
 BitTorrent \`e un popolare protocollo P2P in cui la collezione di peers che partecipano nella distribuzione di un file \`e chiamata torrent. I Peers in un
 torrent scaricano chunks con stesse dimensioni (tipicamente 256 KBytes) del file l'uno con l'altro. Quando un peer si unisce ad un torrent all'inizio non
 possiede nessun chunk, ma mentre comincia a scaricarli comincia anche a caricarli ad altri peers. Quando un peer acquisisce tutti i chunks potrebbe 
-abbandonare il torrent o rimanerci in modo da contitnuare ad uploadare chunks ad altri utenti. Inoltre un peer potrebbe lasciare il torrent in qualsiasi 
+abbandonare il torrent o rimanerci in modo da continuare ad uploadare chunks ad altri utenti. Inoltre un peer potrebbe lasciare il torrent in qualsiasi 
 momento per poi ritornarci quando desidera. Ogni torrent possiede un nodo infrastrutturale chiamato tracker. Quando un peer si unisce ad un torrent si 
 registra con il tracker e lo informa periodicamente che si trova nel tracker. Quando questo avviene il tracker seleziona randomicamente un sottoinsieme di
 peers tra i partecipanti a quello che si \`e appena aggiunto e invia a quest ultimo i loro IP. Attraverso questi IP il nuovo peer tenta di stabilire una
@@ -328,16 +328,16 @@ Pertanto ad ogni istante il peer sa quali chunk possiede e quali chunk possiedon
 di "pi\`u rari prima" in modo da distribuire quelli meno presenti pi\`u velocemente ed equalizzando il numero di chunk nella rete. Per determinare a quali
 richieste rispondere utilizza un algoritmo di trading. L'idea alla base \`e di dare priorit\`a ai richiedenti da cui sta ricevendo dati al tasso maggiore. 
 Pi\`u specificatamente il peer monitora i tassi con cui riceve dati e determina i quattro peer che inviano il maggior numero di bit inviando loro i chunks.
-Ogni 10 secondi questa lista viene aggiornata aggiornando i 4 peers "unchocked". Inoltre ogni 30 secondi scegle un vicino randomicamente (optimistically 
-unchocked). Questo permette che peers capaci di uploadare file a tassi compatibili comunicano tra di loro e a nuovi peers di ricevere dati. Tutti i peers
-tranne questi 5 sono chocked, ovvero non ricevono nessun chunck dal peer. Questo meccanismo \`e conosciuto anche come tit-fot-tat.
+Ogni 10 secondi questa lista viene aggiornata aggiornando i 4 peers "unchocked". Inoltre ogni 30 secondi sceglie un vicino randomicamente (optimistically 
+unchocked). Questo permette che peers capaci di uploadare file a tassi compatibili comunichino tra di loro e a nuovi peers di ricevere dati. Tutti i peers
+tranne questi 5 sono chocked, ovvero non ricevono nessun chunck dal peer. Questo meccanismo \`e conosciuto anche come tit-for-tat.
 \section{Video streaming e content distribution networks}
 Questi servizi sono implementati attraverso protocolli ad application-layer e servers che funzionano in maniera analoga a caches.
 \subsection{Internet video}
 In applicazioni di streaming di video salvati il video da distribuire \`e salvato in server e gli utenti inviano richieste al server per vedere i video on
 demand. 
 \subsubsection{Video}
-un video \`e una sequenza di immagini, tipicamente ad un frame fisso. Un video non compresso consiste in un array di pixels, ognuno dei quali codificato 
+Un video \`e una sequenza di immagini, tipicamente ad un frame fisso. Un video non compresso consiste in un array di pixels, ognuno dei quali codificato 
 come un numero di bits che rappresentano colore e luminescenza. I video possono essere compressi, diminuendo la qualit\`a per ottenere un bit-rate pi\`u 
 basso. Da un punto di vista di rete la caratteristica principale \`e il bit-rate che pu\`o essere di grande dimensione: pu\`o variare da $100\frac{kb}{s}$
 fino a $10\frac{Mb}{s}$. Essendo la misura di performance per per streaming video \`e il throughput end-to-end. Per ottenere un playout continuo quest 
@@ -353,21 +353,21 @@ Il protocollo DASH o dynamic adaptive streaming over HTTP nasce per premettere d
 differente bit-rate e pertanto qualit\`a. Il client dinamicamente richiede chunks di video di pochi secondi selezionando la qualit\`a (e pertanto il bit-
 rate) in base alla bandwidth disponibile in quel momento. I chunks sono richiesti attraverso singole richieste HTTP \emph{GET}. Con DASH ogni video \`e 
 salvato nel server HTTP, ogni versione con un diverso URL. Il server HTTP possiede anche un manifest file che mette a disposizione gli URL per ogni versione
-indicando il suo bit-rate. Il client richiede il manifest file in modo da conoscere le differenti versioni e richiede chunks da una di esse attreverso un
+indicando il suo bit-rate. Il client richiede il manifest file in modo da conoscere le differenti versioni e richiede chunks da una di esse attraverso un
 messaggio \emph{GET} specificando un URL e un byte range. Mentre scarica i chunks il client monitora la bandwidth di ricezione e lancia un algoritmo di rate 
 determination per selezionare il chunk da richiedere successivamente. DASH permette pertanto di cambiare liberamente tra diverse qualit\`a. 
 \subsection{Content distribution networks}
-In modo da riuscire a distribuire enormi quantit\`a di dati a utenti distribuiti in tutto il mondo vengono utilizzate Content Distribution Networsk (CDNs),
+In modo da riuscire a distribuire enormi quantit\`a di dati a utenti distribuiti in tutto il mondo vengono utilizzate Content Distribution Networks (CDNs),
 sistemi che gestiscono server distribuiti geograficamente salvando in ognuno di essi copie dei video e reindirizzando gli utenti verso i server che 
 garantiscono la migliore esperienza. CDNs possono adottare una delle seguenti pratiche di server placement:
 \begin{itemize}
 \item Enter Deep: in questa pratica vengono creati server clusters in access ISPs in tutto il mondo in modo da essere vicini agli utenti finali, aumentando
 il throughput diminuendo il numero di links tra server e client. La grande quantit\`a di server rende la gestione difficile. 
-\item Bring home: in questa pratica portanto a casa gli ISPs costruendo pochi server clusters vicino agli internet exchange points (IXPs), rendendo pi\`u 
+\item Bring home: in questa pratica portando a casa gli ISPs costruendo pochi server clusters vicino agli internet exchange points (IXPs), rendendo pi\`u 
 semplice la loro gestione.
 \end{itemize}
 Una volta posizionati i cluster le CDNs replicano in essi i propri contenuti attraverso una push strategy: quando un video non presente sul cluster viene
-richiesto questo viene richiesto ad un altro e viene inviato all'utente mentre ne si fa una copia nel cluster locale. Quando il cluster diventa pieno i 
+richiesto tale richiesta viene girata ad un altro cluster che la invier\`a al cluster precedente e al client. Quando il cluster diventa pieno i 
 video meno richiesti vengono eliminati. 
 \subsubsection{CDN operation}
 Quando un browser in host utente deve recuperare un video identificato da un URL il CDN deve intercettare la richiesta in modo da determinare un server
@@ -377,7 +377,7 @@ richiesto:
 \item L'utente visita la pagina web che lo contiene.
 \item Quando l'utente seleziona il video viene inviata una query DNS con il dominio preceduto da \emph{video.}.
 \item Il server DNS locale all'utente (LDNS) invia la richiesta verso un authoritative DNS che osserva la stringa \emph{video} e gira la query verso la CDN 
-con l'indirizzo IP dell'utente che ritona un hostname nel dominio del CNS all' LDNS.
+con l'indirizzo IP dell'utente che ritorna un hostname nel dominio del CNS all' LDNS.
 \item Da questo punto la query entra nell'infrastruttura DNS privata del CDN: l'LDNS invia verso di esso una query DNS che ritorna un IP
 \item L'LDNS invia all'utente l'indirizzo IP contenente il CND content server.
 \item L'utente inizia una connessione TCP e lancia una richiesta HTTP \emph{GET}.
@@ -385,5 +385,5 @@ con l'indirizzo IP dell'utente che ritona un hostname nel dominio del CNS all' L
 \subsubsection{Cluster selection strategies}
 Alla base di un deployment CDN c\`e una cluster selection strategy, il meccanismo che reindirizza dinamicamente i client verso il content server 
 appropriato. Dopo aver appreso l'IP del client il CDN deve decidere un cluster appropriato basandosi su di esso. Una strategia si basa sul selezionare
-il cluster geograficamente pi\`u vicino. Oppure si possono monitorare i ritardi e le perdite di performance tra client e cluster attraverso periodici real-
-time measurment. Questi possono essere svolti attraverso ping ai LDNS.
+il cluster geograficamente pi\`u vicino. Oppure si possono monitorare i ritardi e le perdite di performance tra client e cluster attraverso periodici 
+real-time measurment. Questi possono essere svolti attraverso ping ai LDNS.

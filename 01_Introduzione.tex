@@ -12,13 +12,14 @@ Un packet switch prende un pacchetto che arriva da uno dei communication links i
 switches. Entrambi svolgono lo steso lavoro. I secondi sono tipicamente utilizzati in access network, i primi nel network core. La sequenza di communication links e packet switches attraversata da un pacchetto
 dall'end system di partenza a quello di arrivo \`e detta route o path attraverso la rete. 
 \subsubsection{Internet Service Providers (ISPs)}
-Ogni end system accede all'internet attraverso gli Internet Service Providers, reti di packet switches e communication linls. ISPs mettono a disposizione diversi tipi di network access agli end systems e sono a 
+Ogni end system accede all'internet attraverso gli Internet Service Providers, reti di packet switches e communication links. ISPs mettono a disposizione diversi tipi di network access agli end systems e sono a 
 loro volta interconnessi. 
 \subsubsection{Protocolli}
 End systems, packet switches e tutte le componenti dell'internet svolgono protocolli che controllano l'invio e la ricezione di informazioni all'interno dell'internet. Il Transmission Control Protocol (TCP) e 
-l'internet protocol (IP) sono due dei protocolli pi\`u importanti. Il protocollo IP specifica il formato dei pacchetti che sono inciati e ricevuti tra routers ed end systems. I protocolli principali sono conosciuti come 
-TCP/IP. Avendo i protocolli un ruolo centrale nell'internet \`e importante che siano univoci e standardizzati negli Internet Standards sviluppati dall'internet engineering task force i cui documetni sono chiamati
-requests for comments (RFCs).
+l'internet protocol (IP) sono due dei protocolli pi\`u importanti. Il protocollo IP specifica il formato dei pacchetti che sono inviati e ricevuti tra routers ed end systems. I protocolli principali sono conosciuti come 
+TCP/IP. Avendo i protocolli un ruolo centrale nell'internet \`e importante che siano univoci e standardizzati negli Internet Standards sviluppati dall'internet engineering task force i cui documenti sono chiamati
+requests for comments (RFCs). Un protocollo si divide in sintassi (struttura dei messaggi), semantica (significato dei messaggi) e temporizzazione (evoluzione nel tempo del protocollo in risposta ad eventi e 
+timers).
 \subsection{A services description}
 L'internet pu\`o anche essere considerato come un'infrastruttura che mette a disposizioni servizi ad applicazioni. Queste applicazioni sono dette distribuite e sono eseguite negli end systems. 
 \subsubsection{Socket interface}
@@ -26,7 +27,7 @@ Gli end systems connessi con l'internet mettono a disposizione un'interfaccia di
 programma di destinazione eseguito su un altro end system. \`E un insieme di regole che il programma inviante deve seguire in modo che l'internet possa inviare i dati. 
 \subsection{Protocolli}
 Un protocollo definisce il formato e l'ordine di messaggi scambiati tra due o pi\`u entit\`a comunicative e le azioni che avvengono durante la trasmissione o ricezione di un messaggio o di altri eventi. L'internet
-ne fa largo uso e differenti protocolli sono utilizzati per compiere attivit\`a di comuunicazione differenti. 
+ne fa largo uso e differenti protocolli sono utilizzati per compiere attivit\`a di comunicazione differenti. 
 \section{Network edge}
 Si cominci a studiare le componenti di una rete di computer e dell'internet che stanno al suo confine. Questi dispositivi sono riferiti come end systems e includono desktop computers, servers, mobile devices e 
 nuove "things". Sono indicati anche come host in quanto hostano (eseguono) programmi applicativi. Questi host si possono dividere in alcuni casi in due ulteriori categorie: clients e servers. 
@@ -35,23 +36,23 @@ Un access network \`e la rete che connette fisicamente un end system al primo ro
 broadband residential access pi\`u diffusi sono digital subscriber line (DSL) e cable. 
 \subsubsection{Digital subscriber line}
 Una residenza ottiene DSL Internet access attraverso la compagnia telefonica, pertanto quando viene utilizzata la compagnia
-telefonica diventa l'ISP. Questa rete si connette al digital subscriber line access multiplexer (DSLAM) attraverso un cavo di rame nell'ufficio centrale della compagia telefonica (CO).  Il DSL modem prende il
-dato dicitale e lo traduce nei toni di trasmissione per i cavi telefonici e lo trasmette al CO, dove viene tradotto al DSLAM nel formato digitale. 
+telefonica diventa l'ISP. Questa rete si connette al digital subscriber line access multiplexer (DSLAM) attraverso un cavo di rame nell'ufficio centrale della compagnia telefonica (CO).  Il DSL modem prende il
+dato digitale e lo traduce nei toni di trasmissione per i cavi telefonici e lo trasmette al CO, dove viene tradotto al DSLAM nel formato digitale. 
 \subsubsection{Cable internet access}
-Questo tipo di connessione utilizza i cavi della connessione per la televisione attraverso cavi di fibra ottica fino a neighborhood-level junctions da cui il cavo coassiale \ `e utilizzato per raggiungere case e 
-appartamenti individuale, \'e anche detta hybrid fiber coax (HFC). Questa connessione richiede modem speciali detti cable modem. Un dispositivo esterno con un cable modem termination system (CMTS)
+Questo tipo di connessione utilizza i cavi della connessione per la televisione attraverso cavi di fibra ottica fino a neighborhood-level junctions da cui il cavo coassiale \`e utilizzato per raggiungere case e 
+appartamenti individuale, \`e anche detta hybrid fiber coax (HFC). Questa connessione richiede modem speciali detti cable modem. Un dispositivo esterno con un cable modem termination system (CMTS)
 che traduce i dati da analogici a digitali. Essendo un shared broadcast medium utenti concorrenti si devono dividere lo stream di dati possibile. Inoltre per questo motivo \`e necessario un distributed multiple 
 access protocol per evitare collisioni. 
 \subsubsection{Fiber to the home}
-Una tecnologia in fase di sviluppo prevede di portare la fibra ottica direttamente alla casa. Comunemente ogni fibra che lasca la centrale \`e condifisa da pi\`u case fino a quando viene splittata ci sono
-due architetture in competizione: active and passive optical networls. La prima \`e switchata attraverso ehternet, nella seconda ogni casa possiede un optical network terminator connesso da una fibra ottica 
+Una tecnologia in fase di sviluppo prevede di portare la fibra ottica direttamente alla casa. Comunemente ogni fibra che lasca la centrale \`e condivisa da pi\`u case fino a quando viene splittata ci sono
+due architetture in competizione: active and passive optical networks. La prima \`e switchata attraverso ethernet, nella seconda ogni casa possiede un optical network terminator connesso da una fibra ottica 
 dedicata ad un neighborhood splitter che combina un numero di case in una singola fibra ottica che connette a un optical line terminator (OLT) nel CO. L'OLT mette a disposizione la conversione tra segnali
 ottici e elettrici. 
 \subsubsection{Ulteriori tecnologie}
 Dove le tecnologie precedenti non riescono ad arrivare si utilizzano link satellitari o dial-up services su linee telefoniche. 
-\subsubsection{Ehternet e WiFi}
+\subsubsection{Ethernet e WiFi}
 Una local area network (LAN) \`e utilizzata per connettere end systems all'edge router. La tecnologia LAN prevalente \`e la ethernet che utilizza una coppia di cavi di rame twistati connessi ad un Ethernet switch
-che a sua volta si connette all'internet. Al giorno d'oggi la maggior parte degli utenti sono connessi attraverso una LAN wireless che si connette successivamente agli switch eternet tramite un wireless access
+che a sua volta si connette all'internet. Al giorno d'oggi la maggior parte degli utenti sono connessi attraverso una LAN wireless che si connette successivamente agli switch ethernet tramite un wireless access
 point. Accesso wireless LAN basato sulla tecnologia IEEE 802.11 \`e conosciuto come WiFi. 
 \subsubsection{Wide-area Wireless access}
 I dispositivi mobili come smartphone possono utilizzare l'infrastruttura wireless telefonica per connettersi a internet con raggi molti elevati. 
@@ -103,18 +104,18 @@ I critici del packet switching sottolineano la sua inusabilit\`a per servizi in 
 della capacit\`a trasmissiva e la sua maggiore semplicit\`a, efficienza e il costo minore. Si noti come in casi di traffico medio offre il packet switching offre prestazioni uguali al circuit switching, mentre in casi
 di traffico intenso migliori in quanto alloca l'utilizzo dei link in base alla domanda e condivide la capacit\`a di trasmissione tra tutti gli utenti. 
 \subsection{Una rete di reti}
-Si \`e visto come gli end systems si connettono all'internet attraverso un ISP che mete a disposizione connettivit\`a attraverso varie tecnologie. Ma per connettere utenti e servizi gli ISP di accesso devono essere
+Si \`e visto come gli end systems si connettono all'internet attraverso un ISP che mette a disposizione connettivit\`a attraverso varie tecnologie. Ma per connettere utenti e servizi gli ISP di accesso devono essere
 a loro volta connessi tra di loro creando una rete di reti. Negli anni questa rete di reti si \`e evoluta in una struttura complessa. La struttura di internet presenta multiple tier-1 ISPs di ampiezza globale a cui si 
 connettono multiple ISPs regionali a cui si connettono ISPs locali. Questo \`e riferito come gerarchia multi-tier, una cruda approssimazione dell'internet. Per rendere pi\`u precisa questa rappresentazione 
 si devono aggiungere punti di presenza (PoPs), multi-homing, peering e internet exchange points (IXPs) I primi esistono in tutti i livelli della gerarchia tranne il pi\`u basso e sono gruppi di routers dove ISPs
-si connettono all'ISP provider. Ogni ISP tranne tier-1 possono scegliere di multi-home, ovvero di connettersi a tue o pi\`u provider ISPs. Due ISPs sullo stesso livello della gerarchia possono peer, ovvero 
+si connettono all'ISP provider. Ogni ISP tranne tier-1 possono scegliere di multi-home, ovvero di connettersi a due o pi\`u provider ISPs. Due ISPs sullo stesso livello della gerarchia possono peer, ovvero 
 connettersi tra di loro in modo da fornire connnettivit\`a diretta. Un IXP \`e un punto di incontro dove ISPs multiple possono peer insieme. Esistono inoltre content-provider networks che provano a bypassare
 i tier pi\`u alti facendo peering con lower tiers. 
 \section{Delays, loss, throughput in packet-switched netwoks}
-Le reti necessariamente impongono un throuput (la quantit\`a di dati al secondo che pu\`o essere trasferita), tra end systems, introducono ritardi e possono perdere pacchetti. 
+Le reti necessariamente impongono un throuput (la quantit\`a di dati al secondo che pu\`o essere trasferita), tra end systems, introducono ritardi e possono perdere pacchetti.
 \subsection{Delays}
 Mentre un pacchetto viaggia tra un nodo e il suo successivo soffre di diversi tipi di ritardi a ogni nodo: nodal processing delays, queuing delays, transmission delays e propagation delays che insieme formano il
-total nodal delay. 
+total nodal delay. $d_{nodal}=d_{proc}+d_{queue}+d_{trans}+d_{prop}$
 \subsubsection{Processing delays}
 Il tempo richiesto per esaminare l'header del pacchetto e determinare la sua direzione sono parte del processing delay. 
 \subsubsection{Queuing delay}
@@ -123,35 +124,38 @@ Nella coda il pacchetto subisce un queuing delay mentre aspetta di essere trasme
 Rappresentano il ritardo generato dal router che trasmette il pacchetto al communication link.
 \subsubsection{Propagation delay}
 Rappresentano il ritardo generato dalla necessit\`a del pacchetto di viaggiare attraverso il communication link \`e calcolato come $\frac{d}{s}$ dove $d$ \`e la distanza tra i router e $s$ la velocit\`a di 
-programmazione del link. 
+propagazione del link. 
 \subsection{Queuing delay e packet loss}
 Il queuing delay pu\`o variare da pacchetto a pacchetto, pertanto se ne misura una media. Aumentando il traffico \`e possibile che la coda si riempia generando cos\`i della perdita dei pacchetti. Pu\`o sussistere
 inoltre un delay dovuto a decisioni e necessit\`a delle applicazioni.
 \subsection{Throughput}
-Si definisce throughput istantaneo il tasso di ricezione di un file , mentre dati un file di $F$ bit che impiega $T$ secondi ad essere ricevuto si definisce throughput medio $\frac{F}{T}$. Si deve pertanto porre
-l'attenzione sul ridurre il delay o aumentare il throughput in base al tipo di applicazione.
+Si definisce throughput istantaneo il tasso di ricezione di un file, mentre dati un file di $F$ bit che impiega $T$ secondi ad essere ricevuto si definisce throughput medio $\frac{F}{T}$. Si deve pertanto porre
+l'attenzione sul ridurre il delay o aumentare il throughput in base al tipo di applicazione. Si definisce bottleneck link un link sul
+cammino end-to-end che limita il throughput.
 \section{Protocol layers e service model}
 \subsection{Architettura a layer}
 Questo tipo di architettura permette di discutere riguardo una parte specifica di un sistema complesso. La semplificazione provvede alla modularizzazione in modo da semplificare i cambi di implementazione.
 \subsubsection{Protocol layering}
-Per mettere a disposizione struttura a il design dei network protocols si utilizzano layer. Ogni protocollo appartiene a un layer e si \`e interessati ai servizi che un layer offre a quello superiore, il suo service 
+Per strutturare il design dei network protocols si utilizzano layer. Ogni protocollo appartiene a un layer e si \`e interessati ai servizi che un layer offre a quello superiore, il suo service 
 model. Un layer di protocollo pu\`o essere implementato attraverso software, hardware o entrambi. Quando presi insieme questi protocolli vengono chiamati protocol stack e quello di internet consiste di 
-cinque: fisico, link, rete, trasporto e applicazione. 
+cinque: fisico, link, rete, trasporto e applicazione. Ogni layer mette a disposizione servizi al livello superiore utilizzando le proprie
+funzionalit\`a e i servizi messi a disposizione dai livelli inferiori. I servizi sono messi a disposizione attraverso Service Access Points
+(SAPs). Il livello $N+1$ considera il livello $N$ una scatola nera che mette a disposizione dei servizi attraverso un'inferfaccia.
 \subsubsection{Application layer}
 \`E il layer dove si trovano le applicazioni di rete e i loro protocolli. Sono distribuiti con un end system che li utilizza per scambiare pacchetti con l'applicazione in un altro end system. Questo pacchetto viene
 chiamato messaggio.
 \subsubsection{Transport layer}
 Questo layer trasporta application-layer messaggi tra applicazioni endpoints. In internet ci sono TCP e UDP. Questi pacchetti vengono chiamati segmenti.
 \subsubsection{Network layer}
-Questo layer muove pacchetti noti come datagrammi tra un host e l'altro. Riceve dal transport layer il segmento e l'indirizzo di destinazione. VIene utilizzato il protocollo IP e altri che determinano le routes.
+Questo layer muove pacchetti noti come datagrammi tra un host e l'altro. Riceve dal transport layer il segmento e l'indirizzo di destinazione. Viene utilizzato il protocollo IP e altri che determinano le routes.
 \subsubsection{Link layer}
-Instrada datagrammi attraverso una serie di routers e sposta il datagramma tr a i nodi. I suoi pacchetti sono chiamati frames.
+Instrada datagrammi attraverso una serie di routers e sposta il datagramma tra i nodi. I suoi pacchetti sono chiamati frames.
 \subsubsection{Physical layers}
 Questo layer muove i singoli bit da un nodo all'altro e i protocolli dipendono dal tipo di mezzo fisico utilizzato.
 \subsubsection{Il modello OSI}
-L'Open system interconnection model organizza le reti in sette layers: di applicazione, presentazione, sessione, trasporto, rete, data link e fisico. Si noti come cinque di questi sono simili a quelle dell'internet
-e si considirino pertanto il layer di presentazione e di sessione. Il primo mette a disposizione servizi che permettono ad applicazioni di interpretare il significato dei dati scambiati come compressioni e 
-criptazione e descrizione. Il secondo delimita e sincronizza lo scabmio dei dati. Questi due layer nell'internet sono lasciati nell'applicazione. 
+L'Open system interconnection model organizza le reti in sette layers: di applicazione, presentazione, sessione, trasporto, rete, data link e fisico. Si noti come cinque di questi sono simili a quelli dell'internet
+e si considerino pertanto il layer di presentazione e di sessione. Il primo mette a disposizione servizi che permettono ad applicazioni di interpretare il significato dei dati scambiati come compressioni e 
+criptazione e descrizione. Il secondo delimita e sincronizza lo scambio dei dati. Questi due layer nell'internet sono lasciati nell'applicazione. 
 \subsection{Incapsulamento}
-Ogni qual volta un pacchetto attraversa un livello viene incapsulato o decapsulato. Pertando un pacchetto ha due tipi di campi: paylod che contiene il pacchetto del layer precedente e l'header che contiene le 
+Ogni qual volta un pacchetto attraversa un livello viene incapsulato o decapsulato. Pertanto un pacchetto ha due tipi di campi: paylod che contiene il pacchetto del layer precedente e l'header che contiene le 
 informazioni necessarie al livello. 
