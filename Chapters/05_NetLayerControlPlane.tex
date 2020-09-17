@@ -35,7 +35,7 @@ del cammino ottimo dal nodo di origine $u$ fino al nodo di destinazione $v$ di q
 come il sottoinsieme dei nodi tali per cui il cammino ottimo \`e stato trovato. L'algoritmo consiste di una fase di inizializzazione e di un loop eseguito
 per ogni nodo del grafo. 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{AlgoritmoDijkstra.png}
+\includegraphics[width=\textwidth]{Pictures/AlgoritmoDijkstra.png}
 \caption{Algoritmo di Dijkstra}
 \end{figure}
 Quando l'algoritmo LS termina si ha per ogni nodo il suo predecessore e il cammino ottimo dal nodo di origine. La tabella di forwarding \`e costruita 
@@ -58,7 +58,7 @@ per aggiornare il proprio vettore delle distanze seguendo l'equazione di Bellman
 vettore delle distanze viene modificato nel passo di aggiornamento $x$ invia una copia ad ogni vicino. Se tutti i nodi continuano a scambiarsi i vettori 
 delle distanze in maniera asincrona ogni stima $D_x(y)$ converge a $d_x(y)$ il costo ottimo reale. 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{AlgoritmoDijkstra.png}
+\includegraphics[width=\textwidth]{Pictures/AlgoritmoDV.png}
 \caption{Algoritmo Distance Vector}
 \end{figure}
 Quello che interessa non \`e la lunghezza del cammino minimo, ma il vicino $v*$ obiettivo del prossimo hop, pertanto nelle righe 13-14 del codice si
@@ -200,7 +200,7 @@ sopra IP in quanto messaggi ICMP sono spostati come payload di IP. Quando un hos
 ICMP. I messaggi ICMP hanno un tipo e in campo di codice e contengono l'header e i primi 8 bytes del datagramma IP che ha causato la generazione del messaggio in modo che il mittente pu\`o determinare
 quale datagramma ha generato l'errore.  
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{ICMPValues.png}
+\includegraphics[width=\textwidth]{Pictures/ICMPValues.png}
 \caption{Tipi di messaggio ICMP}
 \end{figure}
 Traceroute utilizza questi messaggi generando pacchetti UDP con TLL incrementale su una con range tra 33434 e 33534 fino a che arriva a ricevere un messaggio ICMP di tipo 3 con codice 3.
@@ -233,6 +233,6 @@ noError per confermare che il valore \`e stato settato.
 \end{itemize}
 Sono tipicamente trasmessi attraverso UDP.
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{SNMPPDUFormato.png}
+\includegraphics[width=\textwidth]{Pictures/SNMPPDUFormato.png}
 \caption{Formato di un PDU SNMP}
 \end{figure}

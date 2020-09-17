@@ -1,4 +1,4 @@
-	\chapter{Il livello di rete: data plane}
+\chapter{Il livello di rete: data plane}
 \section{Considerazioni sul livello di rete}
 A differenza dei livelli precedenti il livello di rete si trova anche nei router e negli elementi del network core. Il ruolo primario del data plane nel 
 livello di rete di ogni router \`e quello di permettere il forwarding dei datagrammi dai suoi input links verso gli output links, il ruolo primario del 
@@ -35,7 +35,7 @@ Il network service model determina le caratteristiche dei servizi offerti dal li
 Il livello di rete garantisce un solo servizio: il servizio di best-effort. In questo servizio n\`e la consegna n\`e l'ordine sono garantiti.
 \section{Componenti di un router}
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{Router.png}
+\includegraphics[width=\textwidth]{Pictures/Router.png}
 \caption{Architettura di un router}
 \end{figure}
 \begin{itemize}
@@ -120,7 +120,7 @@ classi con pacchetti. Ogni classe ottiene un throughput di almeno $R\frac{w_i}{\
 \section{Il protocollo di internet: IPv4, indirizzamento, IPv6}
 \subsection{Formato del datagramma IPv4}
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{IPv4Datagram.png}
+\includegraphics[width=\textwidth]{Pictures/IPv4Datagram.png}
 \caption{formato del datagramma IPv4}
 \end{figure}
 I campi nel datagramma IPv4 sono:
@@ -234,7 +234,7 @@ I maggiori cambi nel formato del datagramma sono:
 \item Flow labeling: in modo da marcare pacchetti per cui il mittente richiede una gestione speciale. 
 \end{itemize}
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{IPv6Datagram.png}
+\includegraphics[width=\textwidth]{Pictures/IPv6Datagram.png}
 \caption{formato del datagramma IPv6}
 \end{figure}
 I seguenti campi sono definiti in IPv6:
@@ -266,7 +266,7 @@ essere droppato o inviato al controller per ulteriore processing.
 \end{itemize}
 \subsection{Matching}
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{FlowTableEntry.png}
+\includegraphics[width=\textwidth]{Pictures/FlowTableEntry.png}
 \caption{formato del datagramma IPv6}
 \end{figure}
 Si noti come l'astrazione fatta sul pacchetto permette di accedere a dati provenienti da diversi livelli dello stack di rete. Le entries possono avere 
