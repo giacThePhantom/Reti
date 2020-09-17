@@ -1,5 +1,5 @@
 # Reti
-Riassunto del corso di reti tenuto a unitn dal professor Segata 2019/2020 
+Riassunto del corso di reti tenuto a unitn dal professor Segata. Università di Trento, 2019/2020 
 
 ## Struttura dei file
 Il file latex Principal.tex deve contenere unicamente input al prefisso e ai capitoli i quali conterranno tutti i contenuti. Il 
